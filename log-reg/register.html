@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Create Account</title>
+    <link rel="stylesheet" href="register.css" />
+  </head>
+  <body>
+    <main class="page">
+      <aside class="hero">
+        <div class="hero-image" aria-hidden="true"></div>
+      </aside>
+
+      <section class="card-wrap">
+        <div class="card">
+          <h1 class="title">Create Account</h1>
+
+          <form class="form" action="#" method="post" novalidate>
+            <div class="row two-up">
+              <div class="field">
+                <label class="label">First Name</label>
+                <input name="first" type="text" autocomplete="given-name" />
+              </div>
+
+              <div class="field">
+                <label class="label">Last Name</label>
+                <input name="last" type="text" autocomplete="family-name" />
+              </div>
+            </div>
+
+            <div class="field">
+              <label class="label">Email</label>
+              <input name="email" type="email" autocomplete="email" />
+            </div>
+
+            <div class="field">
+              <label class="label">Password</label>
+              <input name="password" type="password" autocomplete="new-password" />
+            </div>
+
+            <button class="cta" type="submit">Create Account</button>
+
+            <p class="muted">Already have an account? <a href="#" class="link">Log in</a></p>
+          </form>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>
