@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>E-Barangay Dashboard - Accounts</title>
+    <link rel="stylesheet" href="dashboard.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Montserrat:wght@700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" />
+    <style>
+      :root {
+        --yellow-bg: #FFD633;
+        --muted: #555;
+        --card-bg: #fff;
+      }
+
+      .main-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+      }
+      .title {
+        font-size: 24px;
+        font-weight: 700;
+      }
+
+      .form-section {
+        background: var(--card-bg);
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+        margin-bottom: 20px;
+      }
+      .form-section h2 {
+        font-size: 18px;
+        margin-bottom: 12px;
+      }
+      .form-group {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 10px;
+        flex-wrap: wrap;
+      }
+      .form-group input,
+      .form-group select {
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        flex: 1;
+        min-width: 150px;
+      }
+      .form-section button {
+        background: #4CAF50;
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+
+      .table-section h2 {
+        font-size: 18px;
+        margin-bottom: 12px;
+      }
+      .account-table {
+        background: var(--card-bg);
+        border-radius: 10px;
+        box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+        overflow: hidden;
+      }
+      .table-head, .table-row {
+        display: grid;
+        grid-template-columns: 1fr 2fr 1.5fr 1.5fr;
+        gap: 12px;
+        padding: 12px;
+        align-items: center;
+      }
+      .table-head {
+        background: #FFDF6C;
+        font-weight: 600;
+      }
+      .table-row {
+        border-top: 1px solid rgba(0,0,0,0.05);
+      }
+      .delete-btn {
+        background: #E53935;
+        color: white;
+        border: none;
+        padding: 6px 10px;
+        border-radius: 6px;
+        cursor: pointer;
+      }
+
+      .nav-item.active {
+        background-color: var(--yellow-bg);
+        color: #000;
+        font-weight: 700;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="dashboard-root">
+      <aside class="sidebar">
+        <div class="sidebar-inner">
+          <img class="logo" src="../User Page/barangay-logo.png" alt="Barangay logo"/>
+          <nav class="nav" aria-label="Main navigation">
+            <a href="dashboard.html" class="nav-item">
+              <i class="fa-solid fa-chart-simple"></i>
+              <span>Dashboard</span>
+            </a>
+            <a href="documents.html" class="nav-item">
+              <i class="fa-solid fa-file-lines"></i>
+              <span>Documents</span>
+            </a>
+            <a href="enlistments.html" class="nav-item">
+              <i class="fa-solid fa-clipboard-check"></i>
+              <span>Enlistment</span>
+            </a>
+            <a href="accounts.html" class="nav-item active" aria-current="page">
+              <i class="fa-solid fa-user"></i>
+              <span>Accounts</span>
+            </a>
+          </nav>
+        </div>
+        <div class="logout">
+          <a href="..\log-reg\login.html" class="nav-item logout-btn">
+            <i class="fa-solid fa-right-from-bracket"></i>
+            <span>Logout</span>
+          </a>
+        </div>
+      </aside>
+
+      <main class="main">
+        <header class="main-header">
+          <h1 class="title">Manage Accounts</h1>
+        </header>
+
+        <!-- Account Creation Form -->
+        <section class="form-section">
+          <h2>Create New Account</h2>
+          <div class="form-group">
+            <input type="text" id="username" placeholder="Username">
+            <input type="password" id="password" placeholder="Password">
+            <select id="role">
+              <option value="User">User</option>
+              <option value="Admin">Admin</option>
+            </select>
+          </div>
+          <button onclick="createAccount()"><i class="fa-solid fa-plus"></i> Create Account</button>
+        </section>
+
+        <!-- Accounts Table -->
+        <section class="table-section">
+          <h2>Accounts List</h2>
+          <div class="account-table">
+            <div class="table-head">
+              <div>ID</div>
+              <div>Username</div>
+              <div>Role</div>
+              <div>Actions</div>
+            </div>
+            <div id="account-rows"></div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script>
+      let accounts = [];
+      let nextId = 1;
+
+      function createAccount() {
+        const username = document.getElementById('username').value.trim();
+        const password = document.getElementById('password').value.trim();
+        const role = document.getElementById('role').value;
+
+        if (!username || !password) {
+          alert("Please fill out all fields.");
+          return;
+        }
+
+        accounts.push({ id: nextId++, username, role });
+        document.getElementById('username').value = '';
+        document.getElementById('password').value = '';
+        renderAccounts();
+      }
+
+      function deleteAccount(id) {
+        accounts = accounts.filter(acc => acc.id !== id);
+        renderAccounts();
+      }
+
+      function renderAccounts() {
+        const container = document.getElementById('account-rows');
+        container.innerHTML = '';
+        accounts.forEach(acc => {
+          const row = document.createElement('div');
+          row.classList.add('table-row');
+          row.innerHTML = `
+            <div>${acc.id}</div>
+            <div>${acc.username}</div>
+            <div>${acc.role}</div>
+            <div><button class="delete-btn" onclick="deleteAccount(${acc.id})"><i class="fa-solid fa-trash"></i> Delete</button></div>
+          `;
+          container.appendChild(row);
+        });
+      }
+    </script>
+  </body>
+</html>
