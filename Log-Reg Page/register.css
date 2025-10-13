@@ -23,7 +23,7 @@ body{font-family:Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Rob
 .hero-image {
   position: absolute;
   inset: 0;
-  background-image: url('register-bg.jpg');
+  background-image: url('assets/register-bg.jpg');
   background-size: cover;
   background-position: center;
   filter: blur(2px) saturate(0.9);
