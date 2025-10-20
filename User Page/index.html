@@ -8,6 +8,65 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
   <style>
+    :root {
+      --yellow: #ffd74d;
+      --deep-yellow: #f7c948;
+      --muted: #555555;
+      --accent: #111;
+      --radius: 14px;
+      --max-width: 1200px;
+      --gap: 28px;
+      font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: #fff;
+      color: var(--accent);
+      -webkit-font-smoothing: antialiased;
+      font-family: 'Inter', sans-serif;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    header {
+      background: var(--yellow);
+      position: sticky;
+      top: 0;
+      z-index: 60;
+      box-shadow: 0 6px 14px rgba(12, 15, 30, 0.06);
+    }
+
+    .header-inner {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 22px;
+    }
+
+    .brand {
+      font-weight: 700;
+      font-size: 22px;
+    }
+
+    nav ul {
+      display: flex;
+      gap: 22px;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      align-items: center;
+    }
+
     nav a {
       position: relative;
       color: var(--accent);
@@ -34,33 +93,7 @@
     nav a:hover::after {
       width: 100%;
     }
-    
-    :root{
-      --yellow:#ffd74d;
-      --deep-yellow:#f7c948;
-      --muted:#555555;
-      --accent:#111;
-      --radius:14px;
-      --max-width:1200px;
-      --gap:28px;
-      font-family:'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
-    }
-    *{box-sizing:border-box}
-    body{
-      margin:0;
-      background:#fff;
-      color:var(--accent);
-      -webkit-font-smoothing:antialiased;
-      font-family:'Inter', sans-serif;
-    }
-    a{color:inherit;text-decoration:none}
 
-    /* Header */
-    header{background:var(--yellow);position:sticky;top:0;z-index:60;box-shadow:0 6px 14px rgba(12,15,30,0.06)}
-    .header-inner{max-width:var(--max-width);margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:14px 22px}
-    .brand{font-weight:700;font-size:22px}
-    nav ul{display:flex;gap:22px;list-style:none;margin:0;padding:0;align-items:center}
-    nav a{color:var(--accent);font-weight:600}
     .profile {
       display: flex;
       align-items: center;
@@ -68,317 +101,380 @@
       text-decoration: none;
       color: inherit;
       cursor: pointer;
+      transition: opacity 0.2s;
     }
 
     .profile:hover {
-      opacity: 0.8; 
-    }
-      .profile .icon {
-    text-decoration: none;
-    cursor: pointer;
-    transition: transform 0.2s ease;
-  }
-
-  .profile .icon:hover {
-    transform: scale(1.1);
-  }
-
-    .profile .icon{width:34px;height:34px;border-radius:50%;background:#000;color:#fff;display:flex;align-items:center;justify-content:center;font-size:16px}
-
-    /* Hero section */
-    .hero-wrap{position:relative;overflow:hidden}
-    .hero-bg{
-      position:absolute;inset:0;
-      background-image:url('barangay-home.jpg');
-      background-size:cover;background-position:center;
-      filter:blur(6px) brightness(0.95);
-      transform:scale(1.02);
-    }
-    .hero-overlay{
-      position:absolute;inset:0;
-      background:linear-gradient(180deg,rgba(255,255,255,0.45),rgba(255,255,255,0.65));
-    }
-    .hero{
-      position:relative;max-width:var(--max-width);margin:0 auto;
-      display:grid;grid-template-columns:1fr 420px;gap:24px;align-items:center;
-      padding:72px 22px;z-index:2;
-    }
-    .hero-left{padding:6px 12px}
-    .hero-left small{display:block;color:var(--muted);font-weight:600;margin-bottom:8px}
-    .hero-left h1{margin:0;font-size:50px;color:#222;font-weight:600}
-    .hero-left h2{margin:6px 0 12px;font-size:68px;line-height:1;font-weight:800;color:#111}
-    .hero-left p{max-width:560px;color:var(--muted);margin:0 0 18px}
-    .hero-actions{display:flex;gap:14px}
-    .btn{
-      display:inline-block;padding:12px 18px;border-radius:12px;border:none;font-weight:700;cursor:pointer;
-      background:var(--deep-yellow);box-shadow:0 6px 20px rgba(0,0,0,0.06);font-size: 27px;
-    }
-    .btn.ghost{background:#fff;border:2px solid rgba(0,0,0,0.06)}
-    .hero-right{display:flex;align-items:center;justify-content:flex-start;padding-left:200px}
-    .logo-large{width:500px;height:500px;flex-shrink:0;display:flex;align-items:center;justify-content:center}
-    .logo-large img{width:100%;height:auto;display:block;mix-blend-mode:multiply}
-
-    /* Mission */
-    .mission{background:var(--yellow);padding:56px 22px;display:flex;gap:32px;align-items:center}
-    .mission img {
-      width: 600px; object-fit: cover; margin-right: 50px; padding-top: 100px; flex-shrink: 0;
-    }
-    .mission .text h3{font-size:60px;margin:0 0 10px;font-weight:800}
-    .mission .text p{color:var(--muted);line-height:1.5;max-width:640px}
-
-
-    section{
-      min-height:100vh;
-      display:flex;align-items:center;justify-content:center;
-      scroll-snap-align:start;
+      opacity: 0.8;
     }
 
-    html {
-    scroll-behavior: smooth;
+    .profile .icon {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: #000;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      transition: transform 0.2s ease;
     }
 
-    footer{
-      scroll-snap-align:start;min-height: 20vh;
-    }
-    /* Projects section */
-    .section{padding:56px 22px;background-color:#FFDF6C}
-    .container{max-width:var(--max-width);margin:0 auto}
-    .projects{display:grid;grid-template-columns:1fr 420px;gap:28px;align-items:center}
-    .section h2{margin-bottom: 150px;font-size: 70px;margin-top: -200px;}
-    .section h3{margin-bottom: 50px;font-size: 35px;}
-    .section h2,.section h3{
-      font-weight:800; text-align:left; color:#222; margin-left: -200px;
-    }
-    .section p{
-      font-size:20px; line-height:1.8; text-align:justify; color:#222; max-width:1000px; margin-right:100px; margin-left: -200px;
-    }
-    .project-photo{width:700px;height:500px;box-shadow:0 8px 28px rgba(0,0,0,0.08)}
-
-    /* Services */
-
-.home-fourth-container {
-    width: 100%;
-    height: 90vh;
-}
-
-.home-fourth-container h1{
-    text-align: center;
-    padding-top: 10px;
-    margin-bottom: 50px;
-    font-weight: 600;
-    position: relative;
-    font-size: 70px;
-}
-
-.home-fourth-container h1::after {
-    content: '';
-    background: #FFD336;
-    width: 100px;
-    height: 5px;
-    position: absolute;
-    bottom: -5px;
-    left: 50%;
-    transform: translateX(-50%);
-}
-
-.row{
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    grid-gap: 20px;
-}
-
-.service {
-  text-align: center;
-  padding: 25px 10px;
-  border-radius: 10px;
-  font-size: 20px;
-  cursor: pointer;
-  transition: transform 0.5s, background 0.5s;
-  background: transparent;
-  text-decoration: none;
-  color: inherit;
-
-  /* Make box square */
-  aspect-ratio: 1 / 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-
-
-.service i{
-    font-size: 80px;
-    margin-bottom: 10px;
-    color: #FFD336;
-}
-
-.service h2{
-    font-weight: 600;
-    margin-bottom: 8px;
-}
-
-.service:hover{
-    background: #FFD336;
-    color: #fff;
-    transform: scale(0.95);
-}
-
-.service:hover i{
-    color: #fff;
-}
-
-    /* Footer */
-    footer {
-      background:#f8d86b;
-      padding:36px 22px;
-      display:flex;
-      flex-direction:column;
-      justify-content:center;
+    .profile .icon:hover {
+      transform: scale(1.1);
     }
 
-    .footer-grid {
-      max-width:var(--max-width);
-      margin:0 auto;
-      display:flex;
-      align-items:flex-start;
-      justify-content:space-between;
-      gap:40px;
-      width:100%;
+    .hero-wrap {
+      position: relative;
+      padding: 180px 0;
+      overflow: hidden;
     }
 
-    .footer-grid > div {
-      flex:1;
+    .hero-wrap::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image: url('assets/barangay-home.jpg');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      filter: blur(6px) brightness(0.95);
+      transform: scale(1.05);
+      z-index: 0;
     }
 
-    .footer-logo {
-      width:120px;
-      height:auto;
-      align-self:center;
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.45), rgba(255, 255, 255, 0.65));
+      z-index: 1;
     }
 
-    .footer-bottom {
-      text-align: center;
-      padding: 18px 0;
+    .hero {
+      position: relative;
+      max-width: var(--max-width);
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 420px;
+      gap: 24px;
+      align-items: center;
+      padding: 72px 22px;
+      z-index: 2;
+    }
+
+    .hero-left h1 {
+      margin: 0;
+      font-size: 50px;
+      color: #222;
+      font-weight: 600;
+    }
+
+    .hero-left h2 {
+      margin: 6px 0 12px;
+      font-size: 68px;
+      line-height: 1;
+      font-weight: 800;
+      color: #111;
+    }
+
+    .hero-left p {
+      max-width: 560px;
       color: var(--muted);
-      font-size: 14px;
-      margin-top: 24px;
-      background-color: #FFDF6C;
+      margin: 0 0 18px;
     }
 
-
-    /* Responsive */
-    @media(max-width:1024px){
-      .hero{grid-template-columns:1fr 340px;padding:56px 18px}
-      .logo-large{width:300px;height:300px}
+    .hero-actions {
+      display: flex;
+      gap: 14px;
     }
 
-    @media(max-width:900px){
-      nav ul{display:none}
-      .hero{grid-template-columns:1fr;padding:40px 18px}
-      .logo-large{width:220px;height:220px;order:-1;margin-bottom:12px}
-      .hero-left h2{font-size:40px}
-      .projects{grid-template-columns:1fr}
-      .mission{flex-direction:column;align-items:flex-start}
-      .services-inner{flex-direction:column;align-items:center}
-      .footer-grid{flex-direction:column;align-items:center;text-align:center}
-      .footer-logo{margin-top:16px}
+    .btn {
+      display: inline-block;
+      padding: 12px 18px;
+      border-radius: 12px;
+      border: none;
+      font-weight: 700;
+      cursor: pointer;
+      background: var(--deep-yellow);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
+      font-size: 18px;
+    }
+
+    .btn.ghost {
+      background: #fff;
+      border: 2px solid rgba(0, 0, 0, 0.06);
+    }
+
+    .hero-right {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .logo-large img {
+      width: 100%;
+      height: auto;
+      max-width: 400px;
+      display: block;
+      mix-blend-mode: multiply;
+    }
+
+    .mission {
+      background: var(--yellow);
+      padding: 80px 22px;
+    }
+
+    .mission .container {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 40px;
+      max-width: var(--max-width);
+      margin: 0 auto;
+    }
+
+    .mission img {
+      width: 100%;
+      max-width: 500px;
+      object-fit: cover;
+      border-radius: 12px;
+    }
+
+    .mission .text {
+      max-width: 600px;
+    }
+
+    .mission .text h3 {
+      font-size: 40px;
+      font-weight: 800;
+      margin-bottom: 10px;
+    }
+
+    .mission .text p {
+      color: var(--muted);
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+
+    .section {
+      background-color: #ffdf6c;
+      padding: 80px 22px;
+    }
+
+    .container-projects {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      gap: 40px;
+    }
+
+    .section h2 {
+      font-size: 50px;
+      font-weight: 800;
+      margin-bottom: 20px;
+    }
+
+    .section h3 {
+      font-size: 30px;
+      margin-bottom: 10px;
+    }
+
+    .section p {
+      font-size: 18px;
+      color: #222;
+      line-height: 1.7;
+      text-align: justify;
+    }
+
+    .project-photo {
+      width: 100%;
+      border-radius: 14px;
+      box-shadow: 0 8px 28px rgba(0, 0, 0, 0.08);
+    }
+
+    .home-fourth-container {
+      padding: 80px 22px;
+      background: #ffd74d;
+    }
+
+    .home-fourth-container h1 {
+      text-align: center;
+      font-size: 50px;
+      font-weight: 700;
+      margin-bottom: 60px;
+    }
+
+    .row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      max-width: var(--max-width);
+      margin: 0 auto;
+    }
+
+    .service {
+      text-align: center;
+      padding: 30px 20px;
+      border-radius: 10px;
+      transition: all 0.3s ease;
+      background: #fff;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    }
+
+    .service i {
+      font-size: 60px;
+      color: #ffd336;
+      margin-bottom: 15px;
+    }
+
+    .service:hover {
+      background: #ffd336;
+      color: #fff;
+      transform: translateY(-5px);
+    }
+
+    .service:hover i {
+      color: #fff;
+    }
+
+  footer {
+    background: #f8d86b;
+    padding: 36px 22px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 20vh;
+  }
+  .footer-grid {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 40px;
+    width: 100%;
+  }
+  .footer-grid > div { flex: 1; }
+  .footer-logo { width: 120px; height: auto; align-self: center; }
+  .footer-bottom {
+    text-align: center;
+    padding: 18px 0;
+    color: var(--muted);
+    font-size: 14px;
+    margin-top: 0px;
+    background-color: #FFFFFF;
+  }
+
+    @media (max-width: 900px) {
+      .hero {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+      .hero-right {
+        justify-content: center;
+      }
+      .mission .container {
+        flex-direction: column;
+      }
+      .container-projects {
+        grid-template-columns: 1fr;
+      }
+      .footer-grid {
+        flex-direction: column;
+        text-align: center;
+      }
     }
   </style>
 </head>
 <body>
-<header>
-  <div class="header-inner">
-    <div class="brand"><a href="index.html">E-Barangay</a></div>
-    <nav>
-      <ul>
-        <li><a href="about-us.html">About Us</a></li>
-        <li><a href="document-request.html">Document Request</a></li>
-        <li><a href="resident-enlistment.html">Resident Enlistment</a></li>
-      </ul>
-    </nav>
-    <a href="profile.html" class="profile">
-      <div>Profile</div>
-      <div class="icon">👤</div>
-    </a>
-  </div>
-</header>
+  <header>
+    <div class="header-inner">
+      <div class="brand"><a href="index.html">E-Barangay</a></div>
+      <nav>
+        <ul>
+          <li><a href="about-us.html">About Us</a></li>
+          <li><a href="document-request.html">Document Request</a></li>
+          <li><a href="resident-enlistment.html">Resident Enlistment</a></li>
+        </ul>
+      </nav>
+      <a href="profile.html" class="profile">
+        <div>Profile</div>
+        <div class="icon">👤</div>
+      </a>
+    </div>
+  </header>
 
-  <!-- Hero -->
   <section class="hero-wrap">
     <div class="hero-bg"></div>
     <div class="hero-overlay"></div>
-    <div class="hero container">
+    <div class="hero">
       <div class="hero-left">
         <h1>Welcome to</h1>
         <h2>Poblacion III</h2>
         <p>Maecenas faucibus urna eget arcu tincidunt, vitae posuere lorem mattis. Community-first services and easy online document requests.</p>
         <div class="hero-actions">
-          <a class="btn" href="#">Become a Resident</a>
+          <a class="btn" href="resident-enlistment.html">Become a Resident</a>
           <a class="btn ghost" href="document-request.html">Request Documents</a>
         </div>
       </div>
       <div class="hero-right">
         <div class="logo-large">
-          <img src="barangay-logo.png" alt="Barangay logo">
+          <img src="assets/barangay-logo.png" alt="Barangay logo">
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Mission -->
   <section class="mission">
-    <div class="container" style="display:flex;gap:28px;align-items:center">
-      <img src="chairman.png" alt="Community">
+    <div class="container">
+      <img src="assets/chairman.png" alt="Community">
       <div class="text">
         <h3>Mission</h3>
         <p>To provide quality services and programs that promote peace, order, health, education, and livelihood, while ensuring transparency, unity, and active participation of every resident in building a progressive and caring community.</p>
-        <h3 style="margin-top:18px">Vision</h3>
+        <h3>Vision</h3>
         <p>A safe, healthy, and empowered barangay where every family lives with dignity, harmony, and opportunity, working together toward sustainable development and a better future for the next generations.</p>
       </div>
     </div>
   </section>
 
-  <!-- Projects -->
   <section class="section">
-    <div class="container projects">
+    <div class="container-projects">
       <div>
         <h2>Projects</h2>
-        <div class="project-card">
-          <h3>Ending Violence Against Women</h3>
-          <p class="muted">An 8-day awareness and advocacy campaign that aims to educate the community about the realities and impacts of violence against women, promote gender equality, and empower women to speak up and seek support. The campaign will include seminars, workshops, film showings, and community discussions that highlight women’s rights, laws protecting women, and available local services for victims of abuse.</p>
-        </div>
+        <h3>Ending Violence Against Women</h3>
+        <p>An 8-day awareness and advocacy campaign that aims to educate the community about the realities and impacts of violence against women, promote gender equality, and empower women to speak up and seek support. The campaign includes seminars, workshops, film showings, and community discussions that highlight women’s rights, laws protecting women, and available local services for victims of abuse.</p>
       </div>
       <aside>
-        <img src="project.jpg" alt="Project photo" class="project-photo">
+        <img src="assets/project.jpg" alt="Project photo" class="project-photo">
       </aside>
     </div>
   </section>
 
-  <!-- Services -->
-<div class="home-fourth-container">
+  <div class="home-fourth-container">
     <h1>Our Services</h1>
     <div class="row">
-    <a href="about-us.html" class="service">
-    <i class="fa-solid fa-address-card"></i>
+      <a href="about-us.html" class="service">
+        <i class="fa-solid fa-address-card"></i>
         <h2>About Us</h2>
         <p>Know more about us</p>
-    </a>
-    <a href="document-request.html" class="service">
+      </a>
+      <a href="document-request.html" class="service">
         <i class="fa-solid fa-file-invoice"></i>
         <h2>Document Request</h2>
         <p>Request Important Documents</p>
-    </a>
-    <a href="resident-enlistment.html" class="service">
+      </a>
+      <a href="resident-enlistment.html" class="service">
         <i class="fa-solid fa-fingerprint"></i>
         <h2>Register</h2>
         <p>Enlist now in our Barangay</p>
-    </a>
-</div>
+      </a>
+    </div>
+  </div>
 
-</div>  
-
-  <!-- Footer -->
   <footer>
     <div class="footer-grid">
       <div>
@@ -411,12 +507,14 @@
         </ul>
       </div>
       <div style="display:flex;align-items:center;justify-content:center;">
-        <img src="barangay-logo.png" alt="Barangay Logo" class="footer-logo">
+        <img src="assets/barangay-logo.png" alt="Barangay Logo" class="footer-logo">
       </div>
     </div>
-    <div class="footer-bottom">
-      © 2025, Made by Atienza, Chung, Hernandez, Ortega
-    </div>
   </footer>
+
+  <div class="footer-bottom">
+    © 2025, Made by Atienza, Chung, Hernandez, Ortega
+   </div>
+
 </body>
 </html>
