@@ -1,0 +1,73 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', sans-serif;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    flex-direction: column;
+    background: #F6F6F6;
+}
+
+.input-group {
+    position: relative;
+    margin: 20px 0;
+}
+
+.input-group label {
+    position: absolute;
+    top: 50%;
+    left: 15px;
+    transform: translateY(-50%);
+    font-size: 16px;
+    color: #202020;
+    padding: 0 5px;
+    pointer-events: none;
+    transition: 0.4s ease;
+    background: #F6F6F6;
+}
+
+.input-group input {
+    width: 360px;
+    height: 60px;
+    font-size: 16px;
+    color: #202020;
+    padding: 0 15px;
+    background: transparent;
+    border: 1.2px solid #202020;
+    outline: none;
+    border-radius: 16px;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+/* Floating label behavior */
+.input-group input:focus~label,
+.input-group input:valid~label,
+.input-group input:-webkit-autofill~label {
+    top: 0;
+    font-size: 14px;
+}
+
+/* Input focus border */
+.input-group input:focus {
+    border-color: #FFDF6C;
+    box-shadow: 0 0 0 3px rgba(255, 211, 54, 0.25);
+}
+
+/* Remove autofill background and color override */
+input:-webkit-autofill {
+    -webkit-box-shadow:
+        0 0 0px 1000px #F6F6F6 inset,       /* restore background */
+        0 0 0 3px rgba(255, 211, 54, 0.25); /* keep focus glow */
+    -webkit-text-fill-color: #202020 !important;
+    caret-color: #202020 !important;
+    border-color: #FFDF6C !important;
+    transition: background-color 9999s ease-in-out 0s;
+}

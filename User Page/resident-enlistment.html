@@ -9,6 +9,7 @@
   :root {
     --yellow: #ffd74d;
     --deep-yellow: #f7c948;
+    --gray-100: #fff;
     --muted: #555555;
     --accent: #111;
     --radius: 14px;
@@ -197,33 +198,203 @@
     margin-bottom: 22px;
     margin-top: 30px;
   }
-  .label {
-    position: absolute;
-    left: 16px;
-    top: -10px;
-    background: #fff;          
-    padding: 4px 8px;
-    color: var(--muted);
-    font-size: 14px;
-    font-weight: 500;
-  }
-  .field input,
-  .field select,
-  .field textarea {
-    width: 100%;
-    padding: 16px 18px;
-    border-radius: var(--field-radius);
-    border: 1px solid #202020;  
-    background: transparent;
-    font-size: 16px;
-  }
-  .field input:focus,
-  .field select:focus,
-  .field textarea:focus {
-    outline: none;
-    border-color: var(--yellow);
-    box-shadow: 0 0 0 3px rgba(255, 211, 54, 0.25);
-  }
+    .label {
+      position: absolute;
+      left: 16px;
+      top: -10px;
+      background: #fff;
+      padding: 4px 8px;
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    /* New Input Field Design System */
+    .input-group {
+      position: relative;
+      margin: 20px 0;
+      width: 100%;
+    }
+
+    .input-group input,
+    .input-group textarea,
+    .input-group select {
+      width: 100%;
+      padding: 18px 22px;
+      border-radius: 16px;
+      border: 1px solid #202020;
+      background: var(--gray-100);
+      /* give fields a solid background so label overlay looks correct */
+      font-size: 16px;
+      color: #202020;
+      outline: none;
+      transition: border-color 0.25s ease, box-shadow 0.25s ease, background-color 0.25s ease;
+    }
+
+    .input-group input::placeholder {
+      color: transparent;
+    }
+
+    /* label sits on top and has its own background and z-index so it never gets hidden */
+    .input-group label {
+      position: absolute;
+      left: 18px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 16px;
+      color: #202020;
+      background-color: var(--gray-100);
+      display: inline-block;
+      padding: 6px 10px;
+      pointer-events: none;
+      z-index: 3;
+      transition: top 0.22s ease, transform 0.22s ease, font-size 0.22s ease, color 0.22s ease, background-color 0.22s ease;
+      border-radius: 8px;
+    }
+
+    /* floating / small label state */
+    .input-group input:focus~label,
+    .input-group input:not(:placeholder-shown)~label,
+    .input-group input:-webkit-autofill~label {
+      top: 0.3rem;
+      font-size: 13px;
+      /* smaller label */
+      color: #333;
+      background-color: var(--gray-100);
+      /* keep same background */
+      padding: 4px 8px;
+    }
+
+    .input-group input:focus {
+      color: #202020;
+      /* keep typing text visible */
+      border-color: #FFDF6C;
+      box-shadow: 0 0 0 3px rgba(255, 211, 54, 0.18);
+    }
+
+    /*Autofill color fix*/
+    input:-webkit-autofill {
+      -webkit-box-shadow:
+        0 0 0px 1000px var(--gray-100) inset;
+      -webkit-text-fill-color: #202020 !important;
+      caret-color: #202020 !important;
+      border-color: #FFDF6C !important;
+      transition: background-color 9999s ease-in-out 0s;
+    }
+
+    .input-group input:-webkit-autofill {
+      -webkit-box-shadow: 0 0 0px 1000px var(--gray-100) inset !important;
+      -webkit-text-fill-color: #202020 !important;
+      caret-color: #202020 !important;
+      border-color: #202020 !important;
+      transition: background-color 9999s ease-in-out 0s;
+      box-shadow: none;
+    }
+
+    .input-group input:-webkit-autofill:focus {
+      -webkit-box-shadow:
+        0 0 0px 1000px var(--gray-100) inset,
+        0 0 0 3px rgba(255, 211, 54, 0.25) !important;
+      border-color: #FFDF6C !important;
+    }
+
+    .input-group input:not(:focus) {
+      box-shadow: none;
+    }
+
+    .input-group textarea {
+      width: 100%;
+      padding: 18px 22px;
+      border-radius: 16px;
+      border: 1px solid #202020;
+      background: transparent;
+      font-size: 16px;
+      color: #202020;
+      outline: none;
+      resize: none;
+      transition: border-color 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    .input-group textarea:focus {
+      border-color: #FFDF6C;
+      box-shadow: 0 0 0 3px rgba(255, 211, 54, 0.25);
+    }
+
+    /* Floating label effect for textarea */
+    .input-group textarea:focus~label,
+    .input-group textarea:not(:placeholder-shown)~label {
+      top: 0.3rem;
+      font-size: 14px;
+    }
+
+    .input-group textarea~label {
+      position: absolute;
+      left: 18px;
+      top: 24px;
+      transform: translateY(-50%);
+      font-size: 16px;
+      color: #202020;
+      background: var(--gray-100);
+      padding: 6px 10px;
+      pointer-events: none;
+      transition: top 0.25s ease, font-size 0.25s ease, color 0.25s ease;
+    }
+
+    .field select {
+      width: 100%;
+      padding: 18px 50px 18px 22px;
+      /* increased right padding */
+      border-radius: 16px;
+      border: 1px solid #202020;
+      background: var(--gray-100);
+      font-size: 16px;
+      color: #202020;
+      outline: none;
+      transition: border-color 0.25s ease, box-shadow 0.25s ease;
+      appearance: none;
+      /* hides the native arrow */
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath fill='none' stroke='%23202020' stroke-width='1.5' d='M1 1l4 4 4-4'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 18px center;
+      /* custom arrow spacing */
+      background-size: 12px;
+    }
+
+    .field select:focus {
+      border-color: #FFDF6C;
+      box-shadow: 0 0 0 3px rgba(255, 211, 54, 0.18);
+    }
+
+    .field textarea {
+      width: 100%;
+      padding: 18px 22px;
+      border-radius: 16px;
+      border: 1px solid #202020;
+      background: var(--gray-100);
+      font-size: 16px;
+      color: #202020;
+      outline: none;
+      resize: vertical;
+      /* allows vertical resizing only */
+      min-height: 100px;
+      /* optional: adjust as needed */
+      transition: border-color 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    .field textarea:focus {
+      border-color: #FFDF6C;
+      box-shadow: 0 0 0 3px rgba(255, 211, 54, 0.18);
+    }
+
+    .field label {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 14px;
+      font-weight: 500;
+      color: #202020;
+    }
 
   /* Checkboxes */
   .checkboxes {
@@ -336,22 +507,25 @@
         <form class="form" action="#" method="post">
           <!-- First & Last Name -->
           <div class="row two-up">
-            <div class="field">
-              <label class="label" for="first_name">First Name</label>
-              <input type="text" id="first_name" name="first_name" required>
+            <div class="input-group">
+              <input name="first_name" type="text" id="first_name" required placeholder=" ">
+              <label>First Name</label>
             </div>
-            <div class="field">
-              <label class="label" for="last_name">Last Name</label>
-              <input type="text" id="last_name" name="last_name" required>
+
+            <div class="input-group">
+              <input name="last_name" type="text" id="last_name" required placeholder=" ">
+              <label>Last Name</label>
             </div>
           </div>
-          <div class="field">
-            <label class="label" for="address">Address</label>
-            <input type="text" id="address" name="address" required>
+
+          <div class="input-group">
+            <input name="address" type="text" id="address" required placeholder=" ">
+            <label>Address</label>
           </div>
-          <div class="field">
-            <label class="label" for="contact">Contact Number</label>
-            <input type="text" id="contact" name="contact" required>
+
+          <div class="input-group">
+            <input name="contact" type="text" id="contact" required placeholder=" ">
+            <label>Contact Number</label>
           </div>
 
           <div class="field">

@@ -14,6 +14,8 @@ registerForm.addEventListener('submit', async (e) => {
     const password = registerForm.password.value;
     const confirmPassword = registerForm.confirmPassword.value;
 
+    
+
     if (password !== confirmPassword) {
         alert("Passwords do not match!");
         return;
@@ -50,4 +52,6 @@ registerForm.addEventListener('submit', async (e) => {
         console.error("Firebase Registration Error:", error);
         alert(`Registration failed: ${error.message}`);
     }
+
+    
 });
