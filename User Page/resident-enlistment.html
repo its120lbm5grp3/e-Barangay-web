@@ -4,6 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>E-Barangay — Document Request</title>
+  <link rel="stylesheet" href="modal.css" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -617,6 +618,39 @@
     © 2025, Made by Atienza, Chung, Hernandez, Ortega
   </div>
 
+    <!-- Modal System -->
+  <div class="modal-overlay" id="termsModal">
+    <div class="modal-container">
+      <h1 class="modal-container-title">Terms and Conditions</h1>
+      <p id="terms-message">
+        By using the E-Barangay website, you agree to comply with our terms and conditions. You must provide accurate
+        information when using our services and avoid any misuse of the system. All content on this platform is the
+        property of the barangay and may not be reproduced or distributed without permission. Violations may result in
+        denial of service or legal action.
+      </p>
+      <div class="modal-buttons">
+        <a href="terms-condition.html" id="terms-read-more" target="_blank">Read More</a>
+        <button id="terms-ok">OK</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="modal">
+    <div class="modal-container">
+      <h1 class="modal-container-title">Data Privacy Act of 2012</h1>
+      <p id="modal-message">
+        The Data Privacy Act of 2012 (Republic Act No. 10173) protects individual personal information stored in
+        information and communications systems. It ensures that your personal data is collected, processed, and stored
+        securely, and only used for lawful purposes with your consent.
+      </p>
+      <div class="modal-buttons">
+        <a href="data-privacy.html" id="modal-read-more" target="_blank">Read More</a>
+        <button id="modal-ok">OK</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="modal.js"></script>
 </body>
 </html>
 
