@@ -1,8 +1,7 @@
 import { auth, db } from '../firebase-config.js';
 import { signInWithEmailAndPassword, GoogleAuthProvider, FacebookAuthProvider, signInWithPopup, getAdditionalUserInfo } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-import { getDoc, setDoc, doc, Timestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { getDoc, setDoc, doc, Timestamp, updateDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-// Wait until DOM is ready
 document.addEventListener("DOMContentLoaded", () => {
   const loginForm = document.querySelector('.form');
   const googleLoginBtn = document.querySelector('.social.google');
@@ -17,7 +16,6 @@ document.addEventListener("DOMContentLoaded", () => {
     modalTitle.textContent = title;
     modalMessage.innerHTML = message;
 
-    // Reset footer and re-add buttons dynamically
     modalFooter.innerHTML = `
       <button class="button is-ghost modal-close">Close</button>
       ${showOk ? '<button class="button is-primary modal-ok">OK</button>' : ''}
@@ -29,19 +27,15 @@ document.addEventListener("DOMContentLoaded", () => {
       modalOverlay.querySelector('.modal-container').classList.add('active');
     });
 
-    // Attach event listeners for footer close buttons
     const closeButtons = modalFooter.querySelectorAll('.modal-close');
     closeButtons.forEach(btn => btn.addEventListener('click', hideModal));
 
-    // Attach listener for OK button if it exists
     const okBtn = modalFooter.querySelector('.modal-ok');
     if (okBtn) okBtn.addEventListener('click', hideModal);
 
-    // Attach listener for the "X" button in the header
     const headerCloseBtn = modalOverlay.querySelector('.modal-container-header .modal-close');
     if (headerCloseBtn) headerCloseBtn.addEventListener('click', hideModal);
 
-    // Allow clicking outside the modal to close
     modalOverlay.addEventListener('click', e => {
       if (e.target === modalOverlay) hideModal();
     });
@@ -64,7 +58,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
-      await handleSuccessfulLogin(userCredential.user);
+      const user = userCredential.user;
+
+      await user.reload();
+
+      if (user.emailVerified) {
+        await handleSuccessfulLogin(user);
+      } else {
+        showModal('Email Verification Required', '<p>Your email has not been verified. Please check your inbox for a verification link.</p>', true);
+      }
     } catch (error) {
       console.error("Error during email/password login:", error);
       showModal('Login Failed', `<p>${error.message}</p>`, true);
@@ -100,13 +102,26 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   async function createUserDoc(user) {
+    const names = user.displayName.split(' ');
+    const firstName = names[0];
+    const lastName = names.slice(1).join(' ');
+
     await setDoc(doc(db, "users", user.uid), {
-      name: user.displayName,
+      firstName,
+      lastName,
       email: user.email,
+      emailVerified: true,
       role: "resident",
-      contact_number: "",
-      address: "",
-      createdAt: Timestamp.now()
+      createdAt: Timestamp.now(),
+      sex: "",
+      address: {
+        blkNo: "",
+        street: "",
+        town: "",
+        city: "",
+        zip: "",
+        country: ""
+      }
     });
   }
 
@@ -116,8 +131,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (userDocSnap.exists()) {
       const userData = userDocSnap.data();
+
+      if (user.emailVerified && !userData.emailVerified) {
+        await updateDoc(userDocRef, {
+          emailVerified: true
+        });
+      }
+
       if (userData.role === "admin") {
-        window.location.href = "../Admin Page/index.html";
+        window.location.href = "../Admin Page/dashboard.html";
       } else {
         window.location.href = "../User Page/index.html";
       }
