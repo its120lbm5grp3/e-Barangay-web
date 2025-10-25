@@ -2,6 +2,7 @@ import { auth, db } from '../firebase-config.js';
 import { signInWithEmailAndPassword, GoogleAuthProvider, FacebookAuthProvider, signInWithPopup, getAdditionalUserInfo } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 import { getDoc, setDoc, doc, Timestamp, updateDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
+// Wait until DOM is ready
 document.addEventListener("DOMContentLoaded", () => {
   const loginForm = document.querySelector('.form');
   const googleLoginBtn = document.querySelector('.social.google');
@@ -16,6 +17,7 @@ document.addEventListener("DOMContentLoaded", () => {
     modalTitle.textContent = title;
     modalMessage.innerHTML = message;
 
+    // Reset footer and re-add buttons dynamically
     modalFooter.innerHTML = `
       <button class="button is-ghost modal-close">Close</button>
       ${showOk ? '<button class="button is-primary modal-ok">OK</button>' : ''}
@@ -27,15 +29,19 @@ document.addEventListener("DOMContentLoaded", () => {
       modalOverlay.querySelector('.modal-container').classList.add('active');
     });
 
+    // Attach event listeners for footer close buttons
     const closeButtons = modalFooter.querySelectorAll('.modal-close');
     closeButtons.forEach(btn => btn.addEventListener('click', hideModal));
 
+    // Attach listener for OK button if it exists
     const okBtn = modalFooter.querySelector('.modal-ok');
     if (okBtn) okBtn.addEventListener('click', hideModal);
 
+    // Attach listener for the "X" button in the header
     const headerCloseBtn = modalOverlay.querySelector('.modal-container-header .modal-close');
     if (headerCloseBtn) headerCloseBtn.addEventListener('click', hideModal);
 
+    // Allow clicking outside the modal to close
     modalOverlay.addEventListener('click', e => {
       if (e.target === modalOverlay) hideModal();
     });
@@ -60,6 +66,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
 
+      // Reload the user to get the latest emailVerified state from Firebase servers.
       await user.reload();
 
       if (user.emailVerified) {
@@ -110,8 +117,9 @@ document.addEventListener("DOMContentLoaded", () => {
       firstName,
       lastName,
       email: user.email,
-      emailVerified: true,
+      emailVerified: true, // Social logins usually have verified emails
       role: "resident",
+      status: "active",
       createdAt: Timestamp.now(),
       sex: "",
       address: {
@@ -132,6 +140,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (userDocSnap.exists()) {
       const userData = userDocSnap.data();
 
+      // If user is verified in Auth but not in Firestore, update Firestore.
       if (user.emailVerified && !userData.emailVerified) {
         await updateDoc(userDocRef, {
           emailVerified: true

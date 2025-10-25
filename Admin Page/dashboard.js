@@ -1,9 +1,30 @@
-import { auth, db } from '../firebase-config.js';
-import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
-import { collection, getDocs, doc, getDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+import { auth, db, rtdb } from '../firebase-config.js';
+import { onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+import { collection, getDocs, doc, getDoc, query, orderBy } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+import { ref, onValue } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js';
 
 document.addEventListener('DOMContentLoaded', () => {
-    const requestsTable = document.querySelector('.table-body');
+
+    const onlineUsersCount = document.getElementById('online-users-count');
+    const pendingDocsCard = document.querySelector('.card.docs .card-number');
+    const acceptedDocsCard = document.querySelector('.card.docs .card-subtitle + .card-number');
+    const pendingEnlistsCard = document.querySelector('.card.enlist .card-number');
+    const acceptedEnlistsCard = document.querySelector('.card.enlist .card-subtitle + .card-number');
+    const activitiesTableBody = document.querySelector('.activities-table .table-body');
+    const logoutButton = document.querySelector('.logout-btn');
+
+    // Handle Logout
+    if (logoutButton) {
+        logoutButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            signOut(auth).then(() => {
+                window.location.href = '../Log-Reg Page/login.html';
+            }).catch((error) => {
+                console.error('Logout Error:', error);
+                alert('Failed to logout. Please try again.');
+            });
+        });
+    }
 
     onAuthStateChanged(auth, async (user) => {
         if (user) {
@@ -12,6 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (userDocSnap.exists() && userDocSnap.data().role === 'admin') {
                 loadDashboardData();
+                listenForOnlineUsers();
             } else {
                 window.location.href = '../Log-Reg Page/login.html';
             }
@@ -20,34 +42,82 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    function listenForOnlineUsers() {
+        const statusRef = ref(rtdb, 'status');
+        onValue(statusRef, (snapshot) => {
+            let onlineCount = 0;
+            if (snapshot.exists()) {
+                const statuses = snapshot.val();
+                for (const uid in statuses) {
+                    if (statuses[uid].isOnline) {
+                        onlineCount++;
+                    }
+                }
+            }
+            if (onlineUsersCount) {
+                onlineUsersCount.textContent = onlineCount;
+            }
+        });
+    }
+
     async function loadDashboardData() {
-        requestsTable.innerHTML = '';
+        // Optimized to fetch data once
+        const requestsQuery = query(collection(db, 'REQUESTS'), orderBy('createdAt', 'desc'));
+        const enlistmentsQuery = query(collection(db, 'ENLISTMENTS'), orderBy('createdAt', 'desc'));
 
-        const requestsSnapshot = await getDocs(collection(db, 'document_requests'));
-        
-        for (const requestDoc of requestsSnapshot.docs) {
-            const requestData = requestDoc.data();
-            const userDocRef = doc(db, 'users', requestData.userId);
-            const userDocSnap = await getDoc(userDocRef);
-            const userData = userDocSnap.data();
+        const [requestsSnapshot, enlistmentsSnapshot] = await Promise.all([
+            getDocs(requestsQuery),
+            getDocs(enlistmentsQuery)
+        ]);
 
+        let pendingDocs = 0;
+        let approvedDocs = 0;
+        let allActivities = [];
+
+        requestsSnapshot.forEach(doc => {
+            const data = doc.data();
+            if (data.status === 'pending') pendingDocs++;
+            if (data.status === 'approved') approvedDocs++;
+            allActivities.push({ ...data, type: data.documentType, timestamp: data.createdAt });
+        });
+
+        let pendingEnlists = 0;
+        let approvedEnlists = 0;
+        enlistmentsSnapshot.forEach(doc => {
+            const data = doc.data();
+            if (data.status === 'pending') pendingEnlists++;
+            if (data.status === 'approved') approvedEnlists++;
+            allActivities.push({ ...data, type: 'Resident Enlistment', timestamp: data.createdAt });
+        });
+
+        // Update stat cards
+        pendingDocsCard.textContent = pendingDocs;
+        acceptedDocsCard.textContent = approvedDocs;
+        pendingEnlistsCard.textContent = pendingEnlists;
+        acceptedEnlistsCard.textContent = approvedEnlists;
+
+        // Sort all activities together
+        allActivities.sort((a, b) => b.timestamp - a.timestamp);
+
+        // Display recent activities
+        activitiesTableBody.innerHTML = ''; 
+        allActivities.slice(0, 10).forEach(activity => {
             const row = document.createElement('div');
             row.classList.add('table-row');
-
-            const name = userData ? `${userData.firstName} ${userData.lastName}` : 'Unknown User';
-            const date = requestData.createdAt.toDate().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+            
+            // Robustness Fix: Handle potentially missing data
+            const date = activity.timestamp ? activity.timestamp.toDate().toLocaleDateString('en-US', { month: 'numeric', day: 'numeric', year: 'numeric' }) : 'No date';
+            const status = activity.status || 'unknown';
+            const name = activity.name || 'Unknown User';
+            const type = activity.type || 'Unknown Request';
 
             row.innerHTML = `
-                <div class="row-name">
-                    <i class="fa-solid fa-circle-user"></i>
-                    <span>${name}</span>
-                </div>
-                <div>${requestData.documentType}</div>
+                <div>${name}</div>
+                <div>${type}</div>
                 <div>${date}</div>
-                <div>${requestData.status}</div>
+                <div class="status-${status.toLowerCase()}">${status}</div>
             `;
-
-            requestsTable.appendChild(row);
-        }
+            activitiesTableBody.appendChild(row);
+        });
     }
 });

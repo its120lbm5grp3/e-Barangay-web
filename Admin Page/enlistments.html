@@ -200,21 +200,7 @@
               <div>Status</div>
               <div>Actions</div>
             </div>
-
-            <div class="table-row">
-              <div>1</div>
-              <div>John Doe</div>
-              <div>123 Street St.</div>
-              <div>12-31-2025</div>
-              <div class="status-pending">Pending</div>
-              <div class="actions">
-                <button class="view-btn" onclick="openModal('1','John Doe','Single','June 1, 2025','123 Street St.','Lorem ipsum dolor sit amet...')">
-                  <i class="fa-solid fa-eye"></i> View
-                </button>
-                <button class="approve-btn"><i class="fa-solid fa-check"></i> Approve</button>
-                <button class="reject-btn"><i class="fa-solid fa-xmark"></i> Reject</button>
-              </div>
-            </div>
+            <div class="table-body"></div>
           </div>
         </section>
       </main>
@@ -238,25 +224,7 @@
       </div>
     </div>
 
-    <script>
-      function openModal(id, name, type, date, address, reason) {
-        document.getElementById('modal-title').innerText = `Details about ID ${id}`;
-        document.getElementById('modal-name').innerText = name;
-        document.getElementById('modal-type').innerText = type;
-        document.getElementById('modal-date').innerText = date;
-        document.getElementById('modal-address').innerText = address;
-        document.getElementById('modal-reason').value = reason;
-        document.getElementById('detailsModal').style.display = 'flex';
-      }
-
-      function closeModal() {
-        document.getElementById('detailsModal').style.display = 'none';
-      }
-
-      window.addEventListener('click', function(e) {
-        const modal = document.getElementById('detailsModal');
-        if (e.target === modal) closeModal();
-      });
-    </script>
+    <script type="module" src="../firebase-config.js"></script>
+    <script type="module" src="enlistments.js"></script>
   </body>
 </html>

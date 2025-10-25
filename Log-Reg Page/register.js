@@ -13,7 +13,6 @@ document.addEventListener("DOMContentLoaded", () => {
     modalTitle.textContent = title;
     modalMessage.innerHTML = message;
 
-    // Reset footer and dynamically add buttons
     modalFooter.innerHTML = `
       <button class="button is-ghost modal-close">Close</button>
       ${showOk ? '<button class="button is-primary modal-ok">OK</button>' : ''}
@@ -25,19 +24,15 @@ document.addEventListener("DOMContentLoaded", () => {
       modalOverlay.querySelector('.modal-container').classList.add('active');
     });
 
-    // Footer close buttons
     const closeButtons = modalFooter.querySelectorAll('.modal-close');
     closeButtons.forEach(btn => btn.addEventListener('click', () => hideModal(redirect)));
 
-    // OK button
     const okBtn = modalFooter.querySelector('.modal-ok');
     if (okBtn) okBtn.addEventListener('click', () => hideModal(redirect));
 
-    // Header X button
     const headerCloseBtn = modalOverlay.querySelector('.modal-container-header .modal-close');
     if (headerCloseBtn) headerCloseBtn.addEventListener('click', () => hideModal(redirect));
 
-    // Close if clicking outside
     modalOverlay.addEventListener('click', e => {
       if (e.target === modalOverlay) hideModal(redirect);
     });
@@ -79,6 +74,7 @@ document.addEventListener("DOMContentLoaded", () => {
         email,
         emailVerified: false,
         role: "resident",
+        status: "active",
         createdAt: Timestamp.now(),
         sex: "",
         address: {
