@@ -1,4 +1,3 @@
-
 import { auth, db } from '../firebase-config.js';
 import { doc, getDoc, addDoc, collection, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
@@ -16,25 +15,26 @@ document.addEventListener('DOMContentLoaded', () => {
     const termsModal = document.getElementById('termsModal');
     const termsOkButton = document.getElementById('terms-ok');
 
-    const showModal = (message) => {
-        modalMessage.textContent = message;
-        modal.style.display = 'block';
+    const showModal = (message, isTerms = false) => {
+        if (isTerms) {
+            document.getElementById('terms-message').textContent = message;
+            termsModal.style.display = 'block';
+        } else {
+            modalMessage.textContent = message;
+            modal.style.display = 'block';
+        }
     };
 
-    const hideModal = () => {
-        modal.style.display = 'none';
+    const hideModal = (isTerms = false) => {
+        if (isTerms) {
+            termsModal.style.display = 'none';
+        } else {
+            modal.style.display = 'none';
+        }
     };
 
-    const showTermsModal = () => {
-        termsModal.style.display = 'block';
-    };
-
-    const hideTermsModal = () => {
-        termsModal.style.display = 'none';
-    };
-
-    modalOkButton.addEventListener('click', hideModal);
-    termsOkButton.addEventListener('click', hideTermsModal);
+    modalOkButton.addEventListener('click', () => hideModal());
+    termsOkButton.addEventListener('click', () => hideModal(true));
 
     onAuthStateChanged(auth, async (user) => {
         if (user) {
@@ -45,11 +45,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 const userData = userDocSnap.data();
                 firstNameField.value = userData.firstName || '';
                 lastNameField.value = userData.lastName || '';
-                addressField.value = userData.address ? `${userData.address.blkNo} ${userData.address.street}, ${userData.address.town}, ${userData.address.city}, ${userData.address.zip}` : '';
+                if (userData.address) {
+                    addressField.value = `${userData.address.blkNo} ${userData.address.street}, ${userData.address.town}, ${userData.address.city}, ${userData.address.zip}`;
+                }
+            } else {
+                // User is not logged in, redirect to login page
+                window.location.href = '../Log-Reg Page/login.html';
             }
-        } else {
-            // User is not logged in, redirect to login page
-            window.location.href = '../Log-Reg Page/login.html';
         }
     });
 
@@ -71,19 +73,19 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         try {
-            await addDoc(collection(db, 'document_requests'), {
+            await addDoc(collection(db, 'REQUESTS'), {
                 userId: user.uid,
-                firstName: firstNameField.value,
-                lastName: lastNameField.value,
+                name: `${firstNameField.value} ${lastNameField.value}`,
                 documentType: documentType,
                 address: addressField.value,
                 reason: reason,
-                status: 'Pending',
+                status: 'pending',
                 createdAt: serverTimestamp()
             });
 
             showModal('Your document request has been submitted successfully!');
             form.reset();
+
         } catch (error) {
             console.error('Error submitting document request:', error);
             showModal('An error occurred while submitting your request. Please try again.');

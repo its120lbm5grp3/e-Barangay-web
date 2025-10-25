@@ -35,11 +35,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 const userData = userDocSnap.data();
                 firstNameField.value = userData.firstName || '';
                 lastNameField.value = userData.lastName || '';
-                addressField.value = userData.address ? `${userData.address.blkNo} ${userData.address.street}, ${userData.address.town}, ${userData.address.city}, ${userData.address.zip}` : '';
+                addressField.value = userData.address ? `${userData.address.blkNo} ${userData.address.street}, ${userData.address.town}, ${userData.address.city}, ${userData.address.zip}`: '';
+            } else {
+                window.location.href = '../Log-Reg Page/login.html';
             }
-        } else {
-            // User is not logged in, redirect to login page
-            window.location.href = '../Log-Reg Page/login.html';
         }
     });
 
@@ -48,12 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const user = auth.currentUser;
         if (!user) {
-            showModal('You must be logged in to submit an enlistment request.');
-            return;
-        }
-
-        if (!civilStatusField.value) {
-            showModal('Please select a civil status.');
+            showModal('You must be logged in to submit a request.');
             return;
         }
 
@@ -63,20 +57,20 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         try {
-            await addDoc(collection(db, 'resident_enlistments'), {
+            await addDoc(collection(db, 'ENLISTMENTS'), {
                 userId: user.uid,
-                firstName: firstNameField.value,
-                lastName: lastNameField.value,
-                address: addressField.value,
-                contact: contactField.value,
+                name: `${firstNameField.value} ${lastNameField.value}`,
                 civilStatus: civilStatusField.value,
-                purpose: purposeField.value,
+                address: addressField.value,
+                contactNumber: contactField.value,
+                purposeOfRegistration: purposeField.value,
+                status: 'pending',
                 createdAt: serverTimestamp()
             });
 
             showModal('Your enlistment request has been submitted successfully!');
             form.reset();
-        } catch (error) {
+        } catch (error) { 
             console.error('Error submitting enlistment request:', error);
             showModal('An error occurred while submitting your request. Please try again.');
         }
