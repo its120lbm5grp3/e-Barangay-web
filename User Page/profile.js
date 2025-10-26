@@ -1,6 +1,6 @@
 
 import { auth, db } from '../firebase-config.js';
-import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 import { doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 // Form and input elements
@@ -14,6 +14,7 @@ const townInput = document.querySelector('#town');
 const cityInput = document.querySelector('#city');
 const zipInput = document.querySelector('#zip');
 const countryInput = document.querySelector('#country');
+const signOutBtn = document.querySelector('#signOutBtn');
 
 onAuthStateChanged(auth, async (user) => {
     if (user) {
@@ -72,6 +73,16 @@ onAuthStateChanged(auth, async (user) => {
             } catch (error) {
                 console.error("Error updating profile: ", error);
                 alert(`Failed to update profile: ${error.message}`);
+            }
+        });
+
+        signOutBtn.addEventListener('click', async () => {
+            try {
+                await signOut(auth);
+                window.location.href = "../Log-Reg Page/login.html";
+            } catch (error) {
+                console.error('Error signing out:', error);
+                alert('Failed to sign out. Please try again.');
             }
         });
 

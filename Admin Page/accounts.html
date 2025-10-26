@@ -73,7 +73,7 @@
       }
       .table-head, .table-row {
         display: grid;
-        grid-template-columns: 1fr 2fr 1.5fr 1.5fr;
+        grid-template-columns: 0.5fr 1.5fr 1.5fr 1fr 1fr 1fr 1fr 1.5fr;
         gap: 12px;
         padding: 12px;
         align-items: center;
@@ -85,7 +85,7 @@
       .table-row {
         border-top: 1px solid rgba(0,0,0,0.05);
       }
-      .delete-btn {
+      .actions-btn {
         background: #E53935;
         color: white;
         border: none;
@@ -99,6 +99,16 @@
         color: #000;
         font-weight: 700;
       }
+
+      .status-active {
+        color: #4CAF50;
+        font-weight: 600;
+      }
+      .status-inactive {
+        color: #E53935;
+        font-weight: 600;
+      }
+
     </style>
   </head>
   <body>
@@ -142,14 +152,16 @@
         <section class="form-section">
           <h2>Create New Account</h2>
           <div class="form-group">
-            <input type="text" id="username" placeholder="Username">
+            <input type="text" id="firstName" placeholder="First Name">
+            <input type="text" id="lastName" placeholder="Last Name">
+            <input type="text" id="username" placeholder="Email">
             <input type="password" id="password" placeholder="Password">
             <select id="role">
-              <option value="User">User</option>
-              <option value="Admin">Admin</option>
+              <option value="user">User</option>
+              <option value="admin">Admin</option>
             </select>
           </div>
-          <button onclick="createAccount()"><i class="fa-solid fa-plus"></i> Create Account</button>
+          <button><i class="fa-solid fa-plus"></i> Create Account</button>
         </section>
 
         <!-- Accounts Table -->
@@ -158,8 +170,12 @@
           <div class="account-table">
             <div class="table-head">
               <div>ID</div>
-              <div>Username</div>
+              <div>Name</div>
+              <div>Email</div>
+              <div>Date Created</div>
               <div>Role</div>
+              <div>Status</div>
+              <div>Online</div>
               <div>Actions</div>
             </div>
             <div id="account-rows"></div>
@@ -168,46 +184,8 @@
       </main>
     </div>
 
-    <script>
-      let accounts = [];
-      let nextId = 1;
-
-      function createAccount() {
-        const username = document.getElementById('username').value.trim();
-        const password = document.getElementById('password').value.trim();
-        const role = document.getElementById('role').value;
-
-        if (!username || !password) {
-          alert("Please fill out all fields.");
-          return;
-        }
-
-        accounts.push({ id: nextId++, username, role });
-        document.getElementById('username').value = '';
-        document.getElementById('password').value = '';
-        renderAccounts();
-      }
-
-      function deleteAccount(id) {
-        accounts = accounts.filter(acc => acc.id !== id);
-        renderAccounts();
-      }
-
-      function renderAccounts() {
-        const container = document.getElementById('account-rows');
-        container.innerHTML = '';
-        accounts.forEach(acc => {
-          const row = document.createElement('div');
-          row.classList.add('table-row');
-          row.innerHTML = `
-            <div>${acc.id}</div>
-            <div>${acc.username}</div>
-            <div>${acc.role}</div>
-            <div><button class="delete-btn" onclick="deleteAccount(${acc.id})"><i class="fa-solid fa-trash"></i> Delete</button></div>
-          `;
-          container.appendChild(row);
-        });
-      }
-    </script>
+    <script type="module" src="../firebase-config.js"></script>
+    <script type="module" src="accounts.js"></script>
+    <script type="module" src="../presence.js"></script>
   </body>
 </html>

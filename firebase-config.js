@@ -3,6 +3,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebas
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-analytics.js";
 import { getAuth } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 import { getFirestore } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { getDatabase } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -13,6 +14,7 @@ const firebaseConfig = {
   apiKey: "AIzaSyCJvuz01ir-0onk9LKrl2Qw9APr7nFRW28",
   authDomain: "e-barangay-396e6.firebaseapp.com",
   projectId: "e-barangay-396e6",
+  databaseURL: "https://e-barangay-396e6-default-rtdb.firebaseio.com",
   storageBucket: "e-barangay-396e6.firebasestorage.app",
   messagingSenderId: "678452381421",
   appId: "1:678452381421:web:9d98261ce6131ac0bbeee4",
@@ -24,5 +26,6 @@ const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 const auth = getAuth(app);
 const db = getFirestore(app);
+const rtdb = getDatabase(app);
 
-export { auth, db };
+export { auth, db, rtdb };

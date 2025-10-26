@@ -1,6 +1,6 @@
 import { auth, db } from '../firebase-config.js';
 import { signInWithEmailAndPassword, GoogleAuthProvider, FacebookAuthProvider, signInWithPopup, getAdditionalUserInfo } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-import { getDoc, setDoc, doc, Timestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { getDoc, setDoc, doc, Timestamp, updateDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 // Wait until DOM is ready
 document.addEventListener("DOMContentLoaded", () => {
@@ -64,7 +64,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
-      await handleSuccessfulLogin(userCredential.user);
+      const user = userCredential.user;
+
+      // Reload the user to get the latest emailVerified state from Firebase servers.
+      await user.reload();
+
+      if (user.emailVerified) {
+        await handleSuccessfulLogin(user);
+      } else {
+        showModal('Email Verification Required', '<p>Your email has not been verified. Please check your inbox for a verification link.</p>', true);
+      }
     } catch (error) {
       console.error("Error during email/password login:", error);
       showModal('Login Failed', `<p>${error.message}</p>`, true);
@@ -100,13 +109,27 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   async function createUserDoc(user) {
+    const names = user.displayName.split(' ');
+    const firstName = names[0];
+    const lastName = names.slice(1).join(' ');
+
     await setDoc(doc(db, "users", user.uid), {
-      name: user.displayName,
+      firstName,
+      lastName,
       email: user.email,
+      emailVerified: true, // Social logins usually have verified emails
       role: "resident",
-      contact_number: "",
-      address: "",
-      createdAt: Timestamp.now()
+      status: "active",
+      createdAt: Timestamp.now(),
+      sex: "",
+      address: {
+        blkNo: "",
+        street: "",
+        town: "",
+        city: "",
+        zip: "",
+        country: ""
+      }
     });
   }
 
@@ -116,8 +139,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (userDocSnap.exists()) {
       const userData = userDocSnap.data();
+
+      // If user is verified in Auth but not in Firestore, update Firestore.
+      if (user.emailVerified && !userData.emailVerified) {
+        await updateDoc(userDocRef, {
+          emailVerified: true
+        });
+      }
+
       if (userData.role === "admin") {
-        window.location.href = "../Admin Page/index.html";
+        window.location.href = "../Admin Page/dashboard.html";
       } else {
         window.location.href = "../User Page/index.html";
       }

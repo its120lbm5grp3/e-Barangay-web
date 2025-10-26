@@ -189,14 +189,31 @@
         font-weight: 600;
         border-radius: var(--radius);
         cursor: pointer;
-        display: block;
-        width: 100%;
         margin-top: 30px;
         transition: background-color 0.3s ease;
     }
 
     .save-button:hover {
         background-color: #e6c341;
+    }
+
+    .sign-out-button {
+        background-color: #f44336;
+        color: white;
+        border: none;
+        padding: 12px 24px;
+        font-size: 16px;
+        font-weight: 600;
+        border-radius: var(--radius);
+        cursor: pointer;
+        display: block;
+        width: 100%;
+        margin-top: 10px;
+        transition: background-color 0.3s ease;
+    }
+
+    .sign-out-button:hover {
+        background-color: #d32f2f;
     }
 
     footer {
@@ -334,6 +351,7 @@
         </div>
       </div>
        <button type="submit" class="save-button">Save Changes</button>
+       <button type="button" id="signOutBtn" class="sign-out-button">Sign Out</button>
     </form>
   </main>
 
