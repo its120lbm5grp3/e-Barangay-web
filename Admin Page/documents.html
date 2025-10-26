@@ -1,230 +1,107 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>E-Barangay Dashboard - Documents</title>
-    <link rel="stylesheet" href="dashboard.css" />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Montserrat:wght@700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" />
-    <style>
-      :root {
-        --yellow-bg: #FFD633;
-        --muted: #555;
-        --card-bg: #fff;
-      }
 
-      /* Search bar */
-      .main-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 20px;
-      }
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>E-Barangay Dashboard - Documents</title>
+  <link rel="stylesheet" href="dashboard.css" />
+  <link rel="stylesheet" href="crud.css" />
+  <link rel="stylesheet" href="modal.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Montserrat:wght@700;800&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    crossorigin="anonymous" />
+</head>
 
-      .title {
-        font-size: 24px;
-        font-weight: 700;
-      }
-
-      .search-bar {
-        display: flex;
-        align-items: center;
-        border: 1px solid #ccc;
-        border-radius: 20px;
-        padding: 5px 12px;
-        background-color: #fff;
-        max-width: 280px;
-      }
-      .search-bar input {
-        border: none;
-        outline: none;
-        padding: 6px;
-        background: transparent;
-        flex: 1;
-      }
-
-      /* Documents Table */
-      .doc-section {
-        margin-top: 20px;
-      }
-      .doc-section h2 {
-        margin: 0 0 18px 0;
-        font-size: 20px;
-        color: #0f172a;
-      }
-      .doc-table {
-        background: var(--card-bg);
-        border-radius: 10px;
-        box-shadow: 0 1px 4px rgba(0,0,0,0.06);
-        overflow: hidden;
-      }
-      .table-head {
-        display: grid;
-        grid-template-columns: 1fr 2fr 1.5fr 1.5fr 1.5fr 2fr;
-        gap: 12px;
-        padding: 12px;
-        background: #FFDF6C;
-        color: #000;
-        font-size: 16px;
-        font-weight: 600;
-      }
-      .table-row {
-        display: grid;
-        grid-template-columns: 1fr 2fr 1.5fr 1.5fr 1.5fr 2fr;
-        gap: 12px;
-        align-items: center;
-        padding: 14px 12px;
-        border-top: 1px solid rgba(0,0,0,0.05);
-      }
-      .status-pending { color: #b58900; font-weight: 600; }
-      .status-approved { color: #4CAF50; font-weight: 600; }
-      .status-rejected { color: #E53935; font-weight: 600; }
-      .actions button {
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        padding: 6px 10px;
-        border: none;
-        border-radius: 6px;
-        font-size: 14px;
-        cursor: pointer;
-        color: white;
-      }
-      .view-btn { background-color: #f0ad4e; }
-      .approve-btn { background-color: #4CAF50; }
-      .reject-btn { background-color: #E53935; }
-
-      /* Modal */
-      .modal-overlay {
-        display: none;
-        position: fixed;
-        top: 0; left: 0;
-        width: 100%; height: 100%;
-        background: rgba(0, 0, 0, 0.5);
-        justify-content: center;
-        align-items: center;
-      }
-      .modal {
-        background: white;
-        padding: 24px;
-        border-radius: 20px;
-        width: 400px;
-        max-width: 90%;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-        position: relative;
-      }
-      .modal h2 {
-        font-family: Montserrat, sans-serif;
-        font-weight: 800;
-        text-align: center;
-        margin-top: 0;
-      }
-      .modal .close-btn {
-        position: absolute;
-        top: 10px;
-        right: 10px;
-        background: none;
-        border: none;
-        font-size: 20px;
-        cursor: pointer;
-      }
-      .modal p { margin: 8px 0; }
-      .modal textarea {
-        width: 100%;
-        height: 80px;
-        resize: none;
-        padding: 8px;
-        margin-top: 5px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-      }
-      .modal .modal-actions {
-        display: flex;
-        justify-content: center;
-        gap: 15px;
-        margin-top: 15px;
-      }
-    </style>
-  </head>
-  <body>
-    <div class="dashboard-root">
-      <aside class="sidebar">
-        <div class="sidebar-inner">
-          <img class="logo" src="../User Page/assets/barangay-logo.png" alt="Barangay logo"/>
-          <nav class="nav" aria-label="Main navigation">
-            <a href="dashboard.html" class="nav-item">
-              <i class="fa-solid fa-chart-simple"></i>
-              <span>Dashboard</span>
-            </a>
-            <a href="documents.html" class="nav-item" aria-current="page">
-              <i class="fa-solid fa-file-lines"></i>
-              <span>Documents</span>
-            </a>
-            <a href="enlistments.html" class="nav-item">
-              <i class="fa-solid fa-clipboard-check"></i>
-              <span>Enlistment</span>
-            </a>
-            <a href="accounts.html" class="nav-item">
-              <i class="fa-solid fa-user"></i>
-              <span>Accounts</span>
-            </a>
-          </nav>
-        </div>
-        <div class="logout">
-          <a href="..\log-reg\login.html" class="nav-item logout-btn">
-            <i class="fa-solid fa-right-from-bracket"></i>
-            <span>Logout</span>
+<body>
+  <div class="dashboard-root">
+    <aside class="sidebar">
+      <div class="sidebar-inner">
+        <img class="logo" src="../User Page/assets/barangay-logo.png" alt="Barangay logo" />
+        <nav class="nav" aria-label="Main navigation">
+          <a href="dashboard.html" class="nav-item">
+            <i class="fa-solid fa-chart-simple"></i>
+            <span>Dashboard</span>
           </a>
+          <a href="documents.html" class="nav-item" aria-current="page">
+            <i class="fa-solid fa-file-lines"></i>
+            <span>Documents</span>
+          </a>
+          <a href="enlistments.html" class="nav-item">
+            <i class="fa-solid fa-clipboard-check"></i>
+            <span>Enlistment</span>
+          </a>
+          <a href="accounts.html" class="nav-item">
+            <i class="fa-solid fa-user"></i>
+            <span>Accounts</span>
+          </a>
+        </nav>
+      </div>
+      <div class="logout">
+        <a href="..\log-reg\login.html" class="nav-item logout-btn">
+          <i class="fa-solid fa-right-from-bracket"></i>
+          <span>Logout</span>
+        </a>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="main-header">
+        <h1 class="title">Manage Document Requests</h1>
+        <div class="search-bar">
+          <i class="fa-solid fa-search"></i>
+          <input type="text" placeholder="Search">
         </div>
-      </aside>
+      </header>
 
-      <main class="main">
-        <header class="main-header">
-          <h1 class="title">Manage Document Requests</h1>
-          <div class="search-bar">
-            <i class="fa-solid fa-search"></i>
-            <input type="text" placeholder="Search">
+      <section class="doc-section">
+        <div class="doc-table">
+          <div class="table-head">
+            <div>ID No.</div>
+            <div>Name</div>
+            <div>Type of Request</div>
+            <div>Date Requested</div>
+            <div>Status</div>
+            <div>Actions</div>
           </div>
-        </header>
+          <div class="table-body"></div>
+        </div>
+      </section>
+    </main>
+  </div>
 
-        <section class="doc-section">
-          <div class="doc-table">
-            <div class="table-head">
-              <div>ID No.</div>
-              <div>Name</div>
-              <div>Type of Request</div>
-              <div>Date Requested</div>
-              <div>Status</div>
-              <div>Actions</div>
-            </div>
-            <div class="table-body"></div>
-          </div>
-        </section>
-      </main>
-    </div>
-
-    <!-- Modal -->
-    <div class="modal-overlay" id="detailsModal">
-      <div class="modal">
-        <button class="close-btn" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button>
-        <h2 id="modal-title">Details about ID</h2>
+  <!-- ✅ Integrated Modal -->
+  <div class="modal-overlay" id="modal">
+    <div class="modal-container" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      <header class="modal-container-header">
+        <h1 id="modal-title" class="modal-container-title">Request Details</h1>
+        <button class="icon-button modal-close" aria-label="Close">✖</button>
+      </header>
+      <section class="modal-container-body rtf" id="modal-message">
         <p><strong>Name:</strong> <span id="modal-name"></span></p>
         <p><strong>Type of Request:</strong> <span id="modal-type"></span></p>
-        <p><strong>Date of Request:</strong> <span id="modal-date"></span></p>
+        <p><strong>Date Requested:</strong> <span id="modal-date"></span></p>
         <p><strong>Address:</strong> <span id="modal-address"></span></p>
-        <label><strong>Reason of Request</strong></label>
-        <textarea id="modal-reason" readonly></textarea>
-        <div class="modal-actions">
-          <button class="approve-btn"><i class="fa-solid fa-check"></i> Approve</button>
-          <button class="reject-btn"><i class="fa-solid fa-xmark"></i> Reject</button>
-        </div>
-      </div>
-    </div>
+        <label><strong>Reason:</strong></label>
+        <textarea id="modal-reason" readonly
+          style="width:100%;height:80px;border:1px solid #ccc;border-radius:6px;padding:8px;"></textarea>
+      </section>
+      <footer class="modal-container-footer">
+        <button class="button is-approve" id="approve-btn">Approve</button>
+        <button class="button is-reject" id="reject-btn">Reject</button>
+        <button class="button is-ghost modal-close">Close</button>
+      </footer>
 
-    <script type="module" src="../firebase-config.js"></script>
-    <script type="module" src="documents.js"></script>
-  </body>
+    </div>
+  </div>
+
+  <script type="module" src="../firebase-config.js"></script>
+  <script type="module" src="documents.js"></script>
+
+</body>
+
 </html>
