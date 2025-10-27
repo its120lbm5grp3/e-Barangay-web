@@ -1,23 +1,21 @@
 {
   "version": 2,
   "builds": [
-    { "src": "Log-Reg Page/**/*", "use": "@vercel/static" },
-    { "src": "User Page/**/*", "use": "@vercel/static" },
-    { "src": "Admin Page/**/*", "use": "@vercel/static" }
+    { "src": "log-reg-page/**/*", "use": "@vercel/static" },
+    { "src": "user-page/**/*", "use": "@vercel/static" },
+    { "src": "admin-page/**/*", "use": "@vercel/static" }
   ],
   "routes": [
-    { "src": "^/$", "dest": "Log-Reg Page/login.html" },
-    { "src": "^/login$", "dest": "Log-Reg Page/login.html" },
-    { "src": "^/register$", "dest": "Log-Reg Page/register.html" },
+    { "src": "^/$", "dest": "log-reg-page/login.html" },
+    { "src": "^/login$", "dest": "log-reg-page/login.html" },
+    { "src": "^/register$", "dest": "log-reg-page/register.html" },
 
-    { "src": "^/user$", "dest": "User Page/index.html" },
-    { "src": "^/user/index$", "dest": "User Page/index.html" },
-    { "src": "^/user/(.*)$", "dest": "User Page/$1.html" },
+    { "src": "^/user$", "dest": "user-page/index.html" },
+    { "src": "^/user/(.*)$", "dest": "user-page/$1.html" },
 
-    { "src": "^/admin$", "dest": "Admin Page/dashboard.html" },
-    { "src": "^/admin/(.*)$", "dest": "Admin Page/$1.html" },
+    { "src": "^/admin$", "dest": "admin-page/dashboard.html" },
+    { "src": "^/admin/(.*)$", "dest": "admin-page/$1.html" },
 
-    { "src": "/(.*)", "dest": "Log-Reg Page/$1" }
-    { "src": "/Log-Reg Page/js/(.*)", "headers": { "Content-Type": "application/javascript" }, "dest": "Log-Reg Page/js/$1" }
+    { "src": "/(.*)", "dest": "log-reg-page/$1" }
   ]
 }
