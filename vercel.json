@@ -18,5 +18,6 @@
     { "src": "^/admin/(.*)$", "dest": "Admin Page/$1.html" },
 
     { "src": "/(.*)", "dest": "Log-Reg Page/$1" }
+    { "src": "/Log-Reg Page/js/(.*)", "headers": { "Content-Type": "application/javascript" }, "dest": "Log-Reg Page/js/$1" }
   ]
 }

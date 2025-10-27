@@ -174,7 +174,7 @@ document.addEventListener("DOMContentLoaded", () => {
     try {
       const idTokenResult = await user.getIdTokenResult(true);
       if (idTokenResult.claims && idTokenResult.claims.admin === true) {
-        window.location.href = "../Admin Page/dashboard.html";
+        window.location.href = "../admin-page/dashboard.html";
         return;
       }
     } catch (err) {
@@ -188,9 +188,9 @@ document.addEventListener("DOMContentLoaded", () => {
       const data = snap.data();
       const role = data.role || 'resident';
       if (role === 'admin') {
-        window.location.href = "../Admin Page/dashboard.html";
+        window.location.href = "../admin-page/dashboard.html";
       } else {
-        window.location.href = "../User Page/index.html";
+        window.location.href = "../user-page/index.html";
       }
       return;
     }
@@ -201,7 +201,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!created) {
       console.warn("Could not create user doc before redirect; continuing to user page anyway.");
     }
-    window.location.href = "../User Page/index.html";
+    window.location.href = "../user-page/index.html";
   }
 
   // === Main login handler ===

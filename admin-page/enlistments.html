@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width,initial-scale=1" />
+	<title>E-Barangay Dashboard - Documents</title>
+	<link rel="stylesheet" href="css/dashboard.css" />
+	<link rel="stylesheet" href="css/crud_enlist.css" />
+	<link rel="stylesheet" href="css/modal.css" />
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Montserrat:wght@700;800&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" /> </head>
+
+<body>
+	<div class="dashboard-root">
+		<aside class="sidebar">
+			<div class="sidebar-inner"> <img class="logo" src="../User Page/assets/barangay-logo.png" alt="Barangay logo" />
+				<nav class="nav" aria-label="Main navigation">
+					<a href="dashboard.html" class="nav-item"> <i class="fa-solid fa-chart-simple"></i> <span>Dashboard</span> </a>
+					<a href="documents.html" class="nav-item"> <i class="fa-solid fa-file-lines"></i> <span>Documents</span> </a>
+					<a href="enlistments.html" class="nav-item" aria-current="page"> <i class="fa-solid fa-clipboard-check"></i> <span>Enlistment</span> </a>
+					<a href="accounts.html" class="nav-item"> <i class="fa-solid fa-user"></i> <span>Accounts</span> </a>
+				</nav>
+			</div>
+			<div class="logout">
+				<a href="..\log-reg\login.html" class="nav-item logout-btn"> <i class="fa-solid fa-right-from-bracket"></i> <span>Logout</span> </a>
+			</div>
+		</aside>
+		<main class="main">
+			<header class="main-header">
+				<h1 class="title">Manage Enlistments</h1>
+				<div class="search-bar"> <i class="fa-solid fa-search"></i>
+					<input type="text" placeholder="Search"> </div>
+			</header>
+			<section class="doc-section">
+				<div class="doc-table">
+					<div class="table-head">
+						<div>ID No.</div>
+						<div>Name</div>
+						<div>Purpose of Registration</div>
+						<div>Date Requested</div>
+						<div>Status</div>
+						<div>Actions</div>
+					</div>
+					<div class="table-body"></div>
+				</div>
+			</section>
+		</main>
+	</div>
+	<!-- ✅ Integrated Modal -->
+	<div class="modal-overlay" id="detailsModal">
+		<div class="modal-container" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+			<header class="modal-container-header">
+				<h1 id="modal-title" class="modal-container-title">Request Details</h1>
+				<button class="icon-button modal-close" aria-label="Close">✖</button>
+			</header>
+			<section class="modal-container-body rtf" id="modal-message">
+				<p><strong>Name:</strong> <span id="modal-name"></span></p>
+				<p><strong>Civil Status:</strong> <span id="modal-type"></span></p>
+				<p><strong>Address:</strong> <span id="modal-address"></span></p>
+				<p><strong>Contact Number:</strong> <span id="modal-contact"></span></p>
+				<p><strong>Date Requested:</strong> <span id="modal-date"></span></p>
+				<p><strong>Purpose of Registration:</strong> <span id="modal-purpose"></span></p>
+				<!-- NEW ETA field (editable by admin) -->
+				<p style="margin-top:10px;">
+					<label for="modal-eta"><strong>ETA (estimated time):</strong></label>
+					<br />
+					<input id="modal-eta" type="text" placeholder="e.g. 3 days, 1 week, 2 business days" style="width:100%;padding:8px;border:1px solid #ccc;border-radius:6px;" /> </p>
+			</section>
+			<footer class="modal-container-footer" style="display:flex;gap:8px;align-items:center;">
+				<button class="button is-approve" id="approve-btn">Approve</button>
+				<button class="button is-reject" id="reject-btn">Reject</button>
+				<!-- NEW Save ETA button -->
+				<button class="button is-primary" id="save-eta-btn">Save ETA</button>
+				<button class="button is-ghost modal-close">Close</button>
+			</footer>
+		</div>
+	</div>
+	<script type="module" src="../firebase-config.js"></script>
+	<script type="module" src="js/enlistments.js"></script>
+</body>
+
+</html>
