@@ -5,6 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>E-Barangay — Terms and Conditions</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+  crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <link rel="stylesheet" href="header.css" />
   <style>
     nav a {
       position: relative;
@@ -162,9 +167,10 @@
 </head>
 <body>
 
-<header>
+<header class="app-header">
   <div class="header-inner">
     <div class="brand"><a href="index.html">E-Barangay</a></div>
+
     <nav>
       <ul>
         <li><a href="about-us.html">About Us</a></li>
@@ -172,10 +178,41 @@
         <li><a href="resident-enlistment.html">Resident Enlistment</a></li>
       </ul>
     </nav>
-    <a href="profile.html" class="profile">
-      <div>Profile</div>
-      <div class="icon">👤</div>
-    </a>
+
+    <!-- Profile dropdown -->
+    <div class="profile-dropdown" id="profileDropdown" data-open="false">
+      <button
+        class="profile-button"
+        id="profileButton"
+        aria-haspopup="true"
+        aria-expanded="false"
+        aria-controls="profileMenu"
+        title="Profile"
+      >
+        <i class="fa-solid fa-user"></i>
+        <span class="sr-only">Open profile menu</span>
+      </button>
+
+      <div class="profile-menu" id="profileMenu" role="menu" aria-labelledby="profileButton" aria-hidden="true">
+        <div class="panel">
+          <!-- greeting area -->
+          <div class="menu-greeting" role="presentation">
+            Hi, <strong id="menuFirstName">Guest</strong>
+          </div>
+
+          <div class="greeting-divider" aria-hidden="true"></div>
+
+          <!-- options (centered text, compact) -->
+          <button class="menu-row" role="menuitem" data-action="profile">Profile</button>
+
+          <!-- separate divider before logout -->
+          <div class="logout-divider" aria-hidden="true"></div>
+
+          <button class="menu-row logout" role="menuitem" data-action="logout">Logout</button>
+        </div>
+      </div>
+    </div>
+    <!-- /.profile-dropdown -->
   </div>
 </header>
 
@@ -258,5 +295,6 @@
   © 2025, Made by Atienza, Chung, Hernandez, Ortega
 </div>
 
+<script type="module" src="header.js" defer></script>
 </body>
 </html>

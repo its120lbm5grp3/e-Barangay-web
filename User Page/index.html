@@ -1,11 +1,15 @@
 <!doctype html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>E-Barangay — Home</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="header.css" />
 
   <style>
     :root {
@@ -124,6 +128,84 @@
     .profile .icon:hover {
       transform: scale(1.1);
     }
+
+    .profile-dropdown {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .profile-button {
+      background: #000;
+      color: #fff;
+      border-radius: 50%;
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: transform 0.2s ease, opacity 0.2s ease;
+    }
+
+    .profile-button:hover {
+      transform: scale(1.05);
+      opacity: 0.9;
+    }
+
+
+    .profile-menu .container {
+      position: absolute;
+    }
+
+    .profile-menu .shadow {
+      left: -50px;
+      opacity: 0;
+      position: absolute;
+      top: -46px;
+      transition: opacity 400ms cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .profile-contents {
+      left: 20px;
+      opacity: 0;
+      position: relative;
+      top: 48px;
+      transition: opacity 400ms cubic-bezier(0.4, 0, 0.2, 1);
+      width: 200px;
+    }
+
+    .profile-contents .row {
+      align-items: center;
+      border-bottom: 1px solid #cdd0de;
+      cursor: pointer;
+      display: flex;
+      height: 46px;
+      padding: 0 10px;
+      font-weight: 500;
+    }
+
+    .profile-contents .row:hover {
+      background: #f8f8f8;
+    }
+
+    .profile-expanded .border1,
+    .profile-expanded .border2 {
+      fill-opacity: 1;
+      stroke: #c6c6cc;
+      stroke-dasharray: 480 480;
+      stroke-dashoffset: 0;
+    }
+
+    .profile-expanded .shadow {
+      opacity: 1;
+    }
+
+    .profile-expanded .profile-contents {
+      opacity: 1;
+      transition: opacity 400ms 100ms cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
 
     .hero-wrap {
       position: relative;
@@ -341,48 +423,62 @@
       color: #fff;
     }
 
-  footer {
-    background: #f8d86b;
-    padding: 36px 22px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    min-height: 20vh;
-  }
-  .footer-grid {
-    max-width: var(--max-width);
-    margin: 0 auto;
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: 40px;
-    width: 100%;
-  }
-  .footer-grid > div { flex: 1; }
-  .footer-logo { width: 120px; height: auto; align-self: center; }
-  .footer-bottom {
-    text-align: center;
-    padding: 18px 0;
-    color: var(--muted);
-    font-size: 14px;
-    margin-top: 0px;
-    background-color: #FFFFFF;
-  }
+    footer {
+      background: #f8d86b;
+      padding: 36px 22px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      min-height: 20vh;
+    }
+
+    .footer-grid {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 40px;
+      width: 100%;
+    }
+
+    .footer-grid>div {
+      flex: 1;
+    }
+
+    .footer-logo {
+      width: 120px;
+      height: auto;
+      align-self: center;
+    }
+
+    .footer-bottom {
+      text-align: center;
+      padding: 18px 0;
+      color: var(--muted);
+      font-size: 14px;
+      margin-top: 0px;
+      background-color: #FFFFFF;
+    }
 
     @media (max-width: 900px) {
       .hero {
         grid-template-columns: 1fr;
         text-align: center;
       }
+
       .hero-right {
         justify-content: center;
       }
+
       .mission .container {
         flex-direction: column;
       }
+
       .container-projects {
         grid-template-columns: 1fr;
       }
+
       .footer-grid {
         flex-direction: column;
         text-align: center;
@@ -390,23 +486,58 @@
     }
   </style>
 </head>
+
 <body>
-  <header>
-    <div class="header-inner">
-      <div class="brand"><a href="index.html">E-Barangay</a></div>
-      <nav>
-        <ul>
-          <li><a href="about-us.html">About Us</a></li>
-          <li><a href="document-request.html">Document Request</a></li>
-          <li><a href="resident-enlistment.html">Resident Enlistment</a></li>
-        </ul>
-      </nav>
-      <a href="profile.html" class="profile">
-        <div>Profile</div>
-        <div class="icon">👤</div>
-      </a>
+<header class="app-header">
+  <div class="header-inner">
+    <div class="brand"><a href="index.html">E-Barangay</a></div>
+
+    <nav>
+      <ul>
+        <li><a href="about-us.html">About Us</a></li>
+        <li><a href="document-request.html">Document Request</a></li>
+        <li><a href="resident-enlistment.html">Resident Enlistment</a></li>
+      </ul>
+    </nav>
+
+    <!-- Profile dropdown -->
+    <div class="profile-dropdown" id="profileDropdown" data-open="false">
+      <button
+        class="profile-button"
+        id="profileButton"
+        aria-haspopup="true"
+        aria-expanded="false"
+        aria-controls="profileMenu"
+        title="Profile"
+      >
+        <i class="fa-solid fa-user"></i>
+        <span class="sr-only">Open profile menu</span>
+      </button>
+
+      <div class="profile-menu" id="profileMenu" role="menu" aria-labelledby="profileButton" aria-hidden="true">
+        <div class="panel">
+          <!-- greeting area -->
+          <div class="menu-greeting" role="presentation">
+            Hi, <strong id="menuFirstName">Guest</strong>
+          </div>
+
+          <div class="greeting-divider" aria-hidden="true"></div>
+
+          <!-- options (centered text, compact) -->
+          <button class="menu-row" role="menuitem" data-action="profile">Profile</button>
+
+          <!-- separate divider before logout -->
+          <div class="logout-divider" aria-hidden="true"></div>
+
+          <button class="menu-row logout" role="menuitem" data-action="logout">Logout</button>
+        </div>
+      </div>
     </div>
-  </header>
+    <!-- /.profile-dropdown -->
+  </div>
+</header>
+
+
 
   <section class="hero-wrap">
     <div class="hero-bg"></div>
@@ -415,7 +546,8 @@
       <div class="hero-left">
         <h1>Welcome to</h1>
         <h2>Poblacion III</h2>
-        <p>Maecenas faucibus urna eget arcu tincidunt, vitae posuere lorem mattis. Community-first services and easy online document requests.</p>
+        <p>Maecenas faucibus urna eget arcu tincidunt, vitae posuere lorem mattis. Community-first services and easy
+          online document requests.</p>
         <div class="hero-actions">
           <a class="btn" href="resident-enlistment.html">Become a Resident</a>
           <a class="btn ghost" href="document-request.html">Request Documents</a>
@@ -434,9 +566,12 @@
       <img src="assets/chairman.png" alt="Community">
       <div class="text">
         <h3>Mission</h3>
-        <p>To provide quality services and programs that promote peace, order, health, education, and livelihood, while ensuring transparency, unity, and active participation of every resident in building a progressive and caring community.</p>
+        <p>To provide quality services and programs that promote peace, order, health, education, and livelihood, while
+          ensuring transparency, unity, and active participation of every resident in building a progressive and caring
+          community.</p>
         <h3>Vision</h3>
-        <p>A safe, healthy, and empowered barangay where every family lives with dignity, harmony, and opportunity, working together toward sustainable development and a better future for the next generations.</p>
+        <p>A safe, healthy, and empowered barangay where every family lives with dignity, harmony, and opportunity,
+          working together toward sustainable development and a better future for the next generations.</p>
       </div>
     </div>
   </section>
@@ -446,7 +581,10 @@
       <div>
         <h2>Projects</h2>
         <h3>Ending Violence Against Women</h3>
-        <p>An 8-day awareness and advocacy campaign that aims to educate the community about the realities and impacts of violence against women, promote gender equality, and empower women to speak up and seek support. The campaign includes seminars, workshops, film showings, and community discussions that highlight women’s rights, laws protecting women, and available local services for victims of abuse.</p>
+        <p>An 8-day awareness and advocacy campaign that aims to educate the community about the realities and impacts
+          of violence against women, promote gender equality, and empower women to speak up and seek support. The
+          campaign includes seminars, workshops, film showings, and community discussions that highlight women’s rights,
+          laws protecting women, and available local services for victims of abuse.</p>
       </div>
       <aside>
         <img src="assets/project.jpg" alt="Project photo" class="project-photo">
@@ -483,7 +621,7 @@
         <div style="margin-top:12px;font-weight:700">Barangay Hall Address:</div>
         <div>J. P. Rizal Street</div>
         <div style="margin-top:12px;font-weight:700">Contact Details:</div>
-        <div class="muted">+63 9425744254<br/>barangaypoblaciontres.tiaong@gmail.com</div>
+        <div class="muted">+63 9425744254<br />barangaypoblaciontres.tiaong@gmail.com</div>
       </div>
       <div>
         <h4>About Us</h4>
@@ -514,7 +652,9 @@
 
   <div class="footer-bottom">
     © 2025, Made by Atienza, Chung, Hernandez, Ortega
-   </div>
+  </div>
 
+<script type="module" src="header.js" defer></script>
 </body>
+
 </html>
