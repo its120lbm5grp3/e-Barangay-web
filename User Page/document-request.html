@@ -7,7 +7,10 @@
   <title>E-Barangay — Document Request</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
     rel="stylesheet">
-  <link rel="stylesheet" href="modal.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="css/modal.css" />
+  <link rel="stylesheet" href="css/header.css" />
   <style>
     :root {
       --yellow: #ffd74d;
@@ -537,78 +540,6 @@
 </head>
 
 <body>
-<<<<<<< Updated upstream
-  <header>
-    <div class="header-inner">
-      <div class="brand"><a href="index.html">E-Barangay</a></div>
-      <nav>
-        <ul>
-          <li><a href="about-us.html">About Us</a></li>
-          <li><a href="document-request.html">Document Request</a></li>
-          <li><a href="resident-enlistment.html">Resident Enlistment</a></li>
-          <li><a href="qr-checker.html">QR Checker</a></li>
-        </ul>
-      </nav>
-      <a href="profile.html" class="profile">
-        <div>Profile</div>
-        <div class="icon">👤</div>
-      </a>
-    </div>
-  </header>
-  <h1>Document Request Form</h1>
-
-  <!-- Document Request Form -->
-  <main class="page">
-    <!-- Left Side Picture -->
-    <aside class="hero">
-      <div class="hero-image" aria-hidden="true"></div>
-    </aside>
-
-    <!-- Right Side Form -->
-    <section class="card-wrap">
-      <div class="card">
-        <form class="form" action="#" method="post">
-          <div class="row two-up">
-            <div class="input-group">
-              <input name="first_name" type="text" id="first_name" required placeholder=" ">
-              <label>First Name</label>
-            </div>
-
-            <div class="input-group">
-              <input name="last_name" type="text" id="last_name" required placeholder=" ">
-              <label>Last Name</label>
-            </div>
-          </div>
-
-          <!-- Document Type -->
-          <div class="field">
-            <label class="label" for="document_type">Document Type</label>
-            <select id="document_type" name="document_type" required>
-              <option value="" disabled selected>Select Document Type</option>
-              <option value="business_permit">Business Permit</option>
-              <option value="barangay_id">Barangay ID</option>
-              <option value="barangay_clearance">Barangay Clearance</option>
-            </select>
-          </div>
-
-          <!-- Address -->
-          <div class="input-group">
-            <input name="address" type="text" id="address" required placeholder=" ">
-            <label>Address</label>
-          </div>
-
-          <!-- Reason -->
-          <div class="input-group">
-            <textarea id="reason" name="reason" rows="4" required placeholder=" "></textarea>
-            <label for="reason">Reason of Request</label>
-          </div>
-
-          <!-- Checkboxes -->
-          <div class="checkboxes">
-            <label>
-              <input type="checkbox" required>
-              <span>
-=======
 	<header class="app-header">
 		<div class="header-inner">
 			<div class="brand"><a href="index.html">E-Barangay</a></div>
@@ -685,7 +616,6 @@
 					<div class="checkboxes">
 						<label>
 							<input type="checkbox" required> <span>
->>>>>>> Stashed changes
                 By ticking, you are confirming that you agree to the
                 <a href="terms-condition.html">Terms and Conditions</a>
               </span>
@@ -779,8 +709,8 @@
       </div>
     </div>
   </div>
-
-  <script src="modal.js"></script>
+  <script type="module" src="js/header.js"></script>
+  <script src="js/modal.js"></script>
 </body>
 
 </html>
