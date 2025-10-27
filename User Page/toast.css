@@ -1,0 +1,112 @@
+@import url('https://fonts.googleapis.com/css2?family=Varela+Round&display=swap');
+
+:root{
+  --eb-success: #03a65a;
+  --eb-error: #db3056;
+  --eb-info: #ffd74d;
+  --eb-shadow: 0 10px 30px rgba(16,24,40,0.12);
+  --eb-left-offset: 12px; /* how far the colored bar sits inside the toast */
+  --eb-toast-width: 360px;
+  --eb-header-height: 72px; /* adjust if your header is taller/shorter */
+  --eb-font: "Varela Round", system-ui, -apple-system, sans-serif;
+}
+
+/* container pinned top-right (below navbar) */
+#eb-toast-container{
+  position: fixed;
+  top: calc(var(--eb-header-height) + 12px);
+  right: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  z-index: 2147483647; /* very high so it sits above everything */
+  pointer-events: none; /* let clicks pass through except on toasts */
+  max-width: calc(var(--eb-toast-width) + 20px);
+}
+
+/* toast */
+.eb-toast{
+  pointer-events: auto;
+  box-sizing: border-box;
+  width: var(--eb-toast-width);
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: var(--eb-shadow);
+  border: 1px solid rgba(0,0,0,0.04);
+  padding: 12px 16px;
+  display: flex;
+  align-items: flex-start;
+  position: relative;
+  overflow: hidden;
+  transform: translateX(110%);
+  opacity: 0;
+  transition: transform 360ms cubic-bezier(.2,.9,.25,1), opacity 260ms ease;
+  font-family: var(--eb-font);
+}
+
+/* shown state */
+.eb-toast.eb-show{
+  transform: translateX(0);
+  opacity: 1;
+}
+
+/* left colored bar moved slightly inside */
+.eb-toast::before{
+  content: "";
+  position: absolute;
+  left: var(--eb-left-offset);
+  top: 10px;
+  bottom: 10px;
+  width: 6px;
+  border-radius: 6px;
+  background: var(--eb-info);
+}
+
+/* type colors */
+.eb-toast.success::before { background: var(--eb-success); }
+.eb-toast.error::before   { background: var(--eb-error); }
+.eb-toast.info::before    { background: var(--eb-info); }
+
+/* content */
+.eb-toast .eb-body{
+  margin-left: calc(var(--eb-left-offset) + 14px);
+  flex: 1;
+}
+.eb-toast h4{
+  margin: 0;
+  font-size: 14px;
+  font-weight: 700;
+  color: #111;
+  line-height: 1.15;
+}
+.eb-toast p{
+  margin: 6px 0 0;
+  color: #444;
+  font-size: 13px;
+  line-height: 1.3;
+}
+
+/* close button */
+.eb-toast .eb-close{
+  position: absolute;
+  right: 8px;
+  top: 8px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  color: #666;
+  font-size: 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.eb-toast .eb-close:hover{ background: rgba(0,0,0,0.06); color: #111; }
+
+/* responsive: full width on small screens */
+@media (max-width: 480px){
+  #eb-toast-container{ left: 12px; right: 12px; top: calc(var(--eb-header-height) + 8px); }
+  .eb-toast{ width: auto; min-width: 0; }
+}
