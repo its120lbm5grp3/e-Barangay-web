@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "builds": [
+    { "src": "Log-Reg Page/**/*", "use": "@vercel/static" }
+  ],
+  "routes": [
+    { "src": "/", "dest": "Log-Reg Page/login.html" },
+    { "src": "/(.*)", "dest": "Log-Reg Page/$1" }
+  ]
+}
