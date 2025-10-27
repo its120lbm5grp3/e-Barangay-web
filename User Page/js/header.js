@@ -1,5 +1,5 @@
 // header.js (type="module")
-import { auth, db } from '../firebase-config.js';
+import { auth, db } from '../../firebase-config.js';
 import { signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
@@ -65,6 +65,12 @@ document.addEventListener('DOMContentLoaded', () => {
     if (action === 'profile') {
       setOpenState(false);
       window.location.href = 'profile.html';
+      return;
+    }
+
+    if (action === 'status') {
+      setOpenState(false);
+      window.location.href = 'status.html';
       return;
     }
 

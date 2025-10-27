@@ -1,9 +1,8 @@
-// status-simple.js (updated)
+// status-simple.js (updated - uses full snapshot to ensure ETA updates in real time)
 // Minimal table showing only the signed-in user's REQUESTS + ENLISTMENTS.
-// Requires: ./firebase-config.js exporting { auth, db } (modular v10)
-// Load as module: <script type="module" src="./status-simple.js"></script>
+// Includes ETA column for document requests and fixes realtime ETA updates.
 
-import { auth, db } from '../firebase-config.js';
+import { auth, db } from '../../firebase-config.js';
 import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
 import {
   collection,
@@ -44,44 +43,55 @@ function formatDate(ts) {
   } catch { return String(ts); }
 }
 function escapeHtml(str) {
-  return String(str ?? '').replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;').replaceAll("'", '&#039;');
+  return String(str ?? '').replaceAll('&', '&amp;')
+                         .replaceAll('<', '&lt;')
+                         .replaceAll('>', '&gt;')
+                         .replaceAll('"', '&quot;')
+                         .replaceAll("'", '&#039;');
 }
 
 // Filtering guard: returns true only if doc belongs to current user
 function docBelongsToCurrentUser(docData) {
   if (!currentUser) return false;
-  // Prefer explicit userId equality (strict)
   if (docData.userId && currentUser.uid && docData.userId === currentUser.uid) return true;
-  // Fallback: if no userId stored, allow match by email (less ideal but common)
   if (!docData.userId && docData.email && currentUser.email && docData.email === currentUser.email) return true;
   return false;
 }
 
-// Upsert and render ---------------------------------------------------------
-function upsertFromChanges(docChanges, collectionName) {
-  // Use a map keyed by collection:id
+// Upsert from full snapshot -------------------------------------------------
+function upsertFromSnapshot(snapshot, collectionName) {
+  // Keep a map of existing items so we don't drop entries from the other collection
   const map = new Map(items.map(i => [`${i.col}:${i.id}`, i]));
 
-  docChanges.forEach(change => {
-    const id = change.doc.id;
-    const key = `${collectionName}:${id}`;
-    const data = change.doc.data();
+  const seenKeys = new Set();
 
-    // Client-side guard: only process docs that belong to current user
+  // Iterate all docs in the snapshot and update the map for this collection
+  snapshot.docs.forEach(docSnap => {
+    const id = docSnap.id;
+    const key = `${collectionName}:${id}`;
+    const data = docSnap.data();
+
+    // Only keep documents that belong to the signed-in user
     if (!docBelongsToCurrentUser(data)) {
-      // Remove if present (in case user used to be admin or data changed)
       map.delete(key);
       return;
     }
 
-    if (change.type === 'removed') {
-      map.delete(key);
-    } else {
-      map.set(key, { id, col: collectionName, data });
-    }
+    map.set(key, { id, col: collectionName, data });
+    seenKeys.add(key);
   });
 
+  // Remove any existing items from this collection that were NOT present in the snapshot
+  // (this handles deletes server-side)
+  for (const k of Array.from(map.keys())) {
+    if (k.startsWith(`${collectionName}:`) && !seenKeys.has(k)) {
+      map.delete(k);
+    }
+  }
+
+  // Convert back to array and sort by createdAt (newest first)
   items = Array.from(map.values()).sort((a, b) => (tsToMillis(b.data.createdAt) || 0) - (tsToMillis(a.data.createdAt) || 0));
+
   renderTable();
 }
 
@@ -103,13 +113,32 @@ function renderTable() {
 
     const submitted = formatDate(d.createdAt || d.date);
     const status = (d.status || 'pending').toLowerCase();
-    const badgeClass = status === 'approved' ? 'badge-approved' : (status === 'denied' ? 'badge-denied' : 'badge-pending');
+    const badgeClass =
+      status === 'approved'
+        ? 'badge-approved'
+        : status === 'denied'
+        ? 'badge-denied'
+        : 'badge-pending';
+
+    // New ETA field (for REQUESTS only). Treat null/undefined/empty-string as '—'
+    let etaRaw = null;
+    if (item.col === 'REQUESTS') {
+      // normalize
+      if (d.eta === undefined || d.eta === null) etaRaw = null;
+      else etaRaw = String(d.eta).trim() === '' ? null : String(d.eta);
+    }
+    const etaDisplay = etaRaw ? escapeHtml(etaRaw) : '—';
 
     tr.innerHTML = `
       <td>${idx++}</td>
       <td style="font-weight:700">${escapeHtml(d.name ?? '—')}</td>
-      <td>${escapeHtml(item.col === 'REQUESTS' ? (d.documentType ?? 'Document') : (d.purposeOfRegistration ?? 'Enlistment'))}</td>
+      <td>${escapeHtml(
+        item.col === 'REQUESTS'
+          ? (d.documentType ?? 'Document')
+          : (d.purposeOfRegistration ?? 'Enlistment')
+      )}</td>
       <td>${escapeHtml(submitted)}</td>
+      <td>${escapeHtml(etaDisplay)}</td>
       <td><span class="badge ${badgeClass}">${escapeHtml(status)}</span></td>
     `;
     tbody.appendChild(tr);
@@ -136,13 +165,15 @@ function cleanupListeners() {
   clearTable();
 }
 
-// Start listeners that explicitly filter by userId == uid (server-side)
 function startListenersForUser(uid) {
   cleanupListeners();
-  // server-side queries: enforce where('userId','==', uid)
   try {
     const reqQ = query(collection(db, 'REQUESTS'), where('userId', '==', uid));
-    const unReq = onSnapshot(reqQ, (snap) => upsertFromChanges(snap.docChanges(), 'REQUESTS'), (err) => handleSnapshotError(err, 'REQUESTS'));
+    const unReq = onSnapshot(
+      reqQ,
+      (snap) => upsertFromSnapshot(snap, 'REQUESTS'),
+      (err) => handleSnapshotError(err, 'REQUESTS')
+    );
     unsubList.push(unReq);
   } catch (err) {
     console.error('Failed to attach REQUESTS listener', err);
@@ -151,7 +182,11 @@ function startListenersForUser(uid) {
 
   try {
     const enQ = query(collection(db, 'ENLISTMENTS'), where('userId', '==', uid));
-    const unEn = onSnapshot(enQ, (snap) => upsertFromChanges(snap.docChanges(), 'ENLISTMENTS'), (err) => handleSnapshotError(err, 'ENLISTMENTS'));
+    const unEn = onSnapshot(
+      enQ,
+      (snap) => upsertFromSnapshot(snap, 'ENLISTMENTS'),
+      (err) => handleSnapshotError(err, 'ENLISTMENTS')
+    );
     unsubList.push(unEn);
   } catch (err) {
     console.error('Failed to attach ENLISTMENTS listener', err);
