@@ -1,6 +1,13 @@
 import { auth, db } from '../firebase-config.js';
 import { onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
-import { collection, getDocs, doc, getDoc, updateDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+import {
+  collection,
+  getDocs,
+  doc,
+  getDoc,
+  updateDoc,
+  serverTimestamp
+} from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 
 document.addEventListener('DOMContentLoaded', () => {
   const tableBody = document.querySelector('.doc-table .table-body');
@@ -25,6 +32,10 @@ document.addEventListener('DOMContentLoaded', () => {
   const modalCloseButtons = Array.from(
     modal.querySelectorAll('.modal-close, .close-btn')
   );
+
+  // NEW references
+  const saveEtaBtn = document.getElementById('save-eta-btn') || modal.querySelector('#save-eta-btn');
+  const etaInput = document.getElementById('modal-eta') || modal.querySelector('#modal-eta');
 
   // --- Modal open/close animations ---
   function openModalOverlay() {
@@ -109,6 +120,8 @@ document.addEventListener('DOMContentLoaded', () => {
           date = '—';
         }
 
+        const etaDisplay = data.eta ? escapeHtml(String(data.eta)) : '—';
+
         row.innerHTML = `
           <div>${id++}</div>
           <div>${escapeHtml(data.name ?? '—')}</div>
@@ -159,12 +172,33 @@ document.addEventListener('DOMContentLoaded', () => {
   async function updateStatus(docId, newStatus) {
     try {
       const ref = doc(db, 'ENLISTMENTS', docId);
-      await updateDoc(ref, { status: newStatus });
+      await updateDoc(ref, {
+        status: newStatus,
+        reviewedBy: adminId,
+        reviewedAt: serverTimestamp()
+      });
       closeModal();
       await loadEnlistments();
     } catch (err) {
       console.error('Failed to update status:', err);
       alert('Failed to update status. See console.');
+    }
+  }
+
+  // --- Update ETA ---
+  async function updateEta(docId, etaValue) {
+    try {
+      const ref = doc(db, 'ENLISTMENTS', docId);
+      await updateDoc(ref, {
+        eta: etaValue,
+        updatedBy: adminId,
+        updatedAt: serverTimestamp()
+      });
+      // refresh list to show new ETA
+      await loadEnlistments();
+    } catch (err) {
+      console.error('Failed to update ETA:', err);
+      alert('Failed to save ETA. See console.');
     }
   }
 
@@ -195,6 +229,13 @@ document.addEventListener('DOMContentLoaded', () => {
       dateStr = requestData?.date || '—';
     }
     safeSet('modal-date', dateStr);
+
+    // populate eta input if present
+    if (etaInput) {
+      etaInput.value = requestData?.eta ?? '';
+    } else {
+      console.warn('#modal-eta not found in DOM');
+    }
 
     modal.dataset.currentDocId = firebaseDocId;
     openModalOverlay();
@@ -231,5 +272,26 @@ document.addEventListener('DOMContentLoaded', () => {
         if (modalApprove) modalApprove.disabled = false;
       }
     });
+  }
+
+  // --- Save ETA Button Listener ---
+  if (saveEtaBtn && etaInput) {
+    saveEtaBtn.addEventListener('click', async (e) => {
+      e.preventDefault();
+      const id = modal.dataset.currentDocId;
+      if (!id) {
+        alert('No document selected.');
+        return;
+      }
+      saveEtaBtn.disabled = true;
+      try {
+        const etaVal = etaInput.value.trim();
+        await updateEta(id, etaVal);
+      } finally {
+        saveEtaBtn.disabled = false;
+      }
+    });
+  } else {
+    console.warn('#save-eta-btn or #modal-eta not found in DOM');
   }
 });
