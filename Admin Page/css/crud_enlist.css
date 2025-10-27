@@ -1,264 +1,271 @@
 :root {
-  --yellow-bg: #FFD633;
-  --card-bg: #fff;
-  --table-gap: 12px;
-  --action-btn-height: 36px;
-  --action-btn-min-width: 92px;
-  --action-btn-radius: 6px;
-  --shadow-subtle: 0 1px 4px rgba(0,0,0,0.06);
+	--yellow-bg: #FFD633;
+	--card-bg: #fff;
+	--table-gap: 12px;
+	--action-btn-height: 36px;
+	--action-btn-min-width: 92px;
+	--action-btn-radius: 6px;
+	--shadow-subtle: 0 1px 4px rgba(0,0,0,0.06);
 }
 
 /* ---------- Base Layout ---------- */
 html, body {
-  height: 100%;
-  margin: 0;
-  font-family: "Inter", sans-serif;
-  color: #0f172a;
-  background: #f6f6f6;
-  overflow: hidden; /* Prevent page scroll */
+	height: 100%;
+	margin: 0;
+	font-family: "Inter", sans-serif;
+	color: #0f172a;
+	background: #f6f6f6;
+	overflow: hidden;
+ /* Prevent page scroll */;
 }
 
 .dashboard-root {
-  display: flex;
-  height: 100%;
-  overflow: hidden;
+	display: flex;
+	height: 100%;
+	overflow: hidden;
 }
 
 .main {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  padding: 20px;
-  overflow: hidden; /* Contain scroll inside the table */
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	padding: 20px;
+	overflow: hidden;
+ /* Contain scroll inside the table */;
 }
 
 /* ---------- Header ---------- */
 .main-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-  gap: 16px;
-  flex-shrink: 0;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 20px;
+	gap: 16px;
+	flex-shrink: 0;
 }
 
 .title {
-  font-size: 28px;
-  font-weight: 700;
-  margin: 0;
+	font-size: 28px;
+	font-weight: 700;
+	margin: 0;
 }
 
 /* ---------- Search Bar ---------- */
 .search-bar {
-  display: flex;
-  align-items: center;
-  border: 1px solid #e3e3e3;
-  border-radius: 26px;
-  padding: 8px 12px;
-  background-color: #fff;
-  max-width: 320px;
-  box-shadow: var(--shadow-subtle);
+	display: flex;
+	align-items: center;
+	border: 1px solid #e3e3e3;
+	border-radius: 26px;
+	padding: 8px 12px;
+	background-color: #fff;
+	max-width: 320px;
+	box-shadow: var(--shadow-subtle);
 }
 
 .search-bar i {
-  margin-right: 8px;
-  color: #666;
+	margin-right: 8px;
+	color: #666;
 }
 
 .search-bar input {
-  border: none;
-  outline: none;
-  padding: 4px 6px;
-  background: transparent;
-  flex: 1;
-  font-size: 14px;
+	border: none;
+	outline: none;
+	padding: 4px 6px;
+	background: transparent;
+	flex: 1;
+	font-size: 14px;
 }
 
 /* ---------- Table Section ---------- */
 .doc-section {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	overflow: hidden;
 }
 
 .doc-table {
-  background: var(--card-bg);
-  border-radius: 10px;
-  box-shadow: var(--shadow-subtle);
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  height: 100%;
+	background: var(--card-bg);
+	border-radius: 10px;
+	box-shadow: var(--shadow-subtle);
+	overflow: hidden;
+	display: flex;
+	flex-direction: column;
+	height: 100%;
 }
 
 /* ---------- Table Header ---------- */
 .table-head {
-  display: grid;
-  grid-template-columns:
-    0.6fr 1fr 2fr 1.5fr 1.5fr 2fr; /* ETA column removed */
-  align-items: center;
-  gap: var(--table-gap);
-  padding: 14px 18px;
-  background: var(--yellow-bg);
-  color: #000;
-  font-size: 16px;
-  font-weight: 700;
-  white-space: nowrap;
-  flex-shrink: 0;
+	display: grid;
+	grid-template-columns: 0.6fr 1fr 2fr 1.5fr 1.5fr 2fr;
+ /* ETA column removed */
+	align-items: center;
+	gap: var(--table-gap);
+	padding: 14px 18px;
+	background: var(--yellow-bg);
+	color: #000;
+	font-size: 16px;
+	font-weight: 700;
+	white-space: nowrap;
+	flex-shrink: 0;
 }
 
 /* ---------- Table Body ---------- */
 .table-body {
-  flex: 1;
-  overflow-y: auto; /* Only the body scrolls */
-  overflow-x: hidden;
-  background: transparent;
+	flex: 1;
+	overflow-y: auto;
+ /* Only the body scrolls */
+	overflow-x: hidden;
+	background: transparent;
 }
 
 .table-body::-webkit-scrollbar {
-  width: 8px;
+	width: 8px;
 }
+
 .table-body::-webkit-scrollbar-thumb {
-  background: rgba(0,0,0,0.15);
-  border-radius: 4px;
+	background: rgba(0,0,0,0.15);
+	border-radius: 4px;
 }
 
 .table-body .table-row {
-  display: grid;
-  grid-template-columns:
-    0.6fr 1.5fr 2.5fr 1.5fr 1.5fr 3fr; /* ETA column removed */
-  align-items: center;
-  gap: var(--table-gap);
-  padding: 14px 18px;
-  border-top: 1px solid rgba(0,0,0,0.05);
-  background: #fff;
-  transition: background 0.1s ease;
+	display: grid;
+	grid-template-columns: 0.6fr 1.5fr 2.5fr 1.5fr 1.5fr 3fr;
+ /* ETA column removed */
+	align-items: center;
+	gap: var(--table-gap);
+	padding: 14px 18px;
+	border-top: 1px solid rgba(0,0,0,0.05);
+	background: #fff;
+	transition: background 0.1s ease;
 }
 
 .table-body .table-row:nth-child(even) {
-  background: #fafafa;
+	background: #fafafa;
 }
 
 .table-body .table-row:hover {
-  background: #f1f1f1;
+	background: #f1f1f1;
 }
 
 /* ---------- Text Behavior ---------- */
 .table-head > div,
 .table-body .table-row > div {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
 }
 
 /* ---------- Status Colors ---------- */
 .status-pending {
-  color: #b58900;
-  font-weight: 700;
+	color: #b58900;
+	font-weight: 700;
 }
+
 .status-approved {
-  color: #2e7d32;
-  font-weight: 700;
+	color: #2e7d32;
+	font-weight: 700;
 }
+
 .status-rejected {
-  color: #c62828;
-  font-weight: 700;
+	color: #c62828;
+	font-weight: 700;
 }
 
 /* ---------- Actions ---------- */
 .table-row .actions {
-  display: flex;
-  justify-content: flex-start;
-  gap: 8px;
-  flex-wrap: nowrap;
+	display: flex;
+	justify-content: flex-start;
+	gap: 8px;
+	flex-wrap: nowrap;
 }
 
 .table-row .actions button {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  height: var(--action-btn-height);
-  min-width: var(--action-btn-min-width);
-  padding: 0 12px;
-  border: none;
-  border-radius: var(--action-btn-radius);
-  font-size: 14px;
-  font-weight: 600;
-  color: #fff;
-  cursor: pointer;
-  box-shadow: 0 3px 6px rgba(0,0,0,0.06);
-  transition: transform 0.08s ease, opacity 0.12s ease;
-  white-space: nowrap;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	height: var(--action-btn-height);
+	min-width: var(--action-btn-min-width);
+	padding: 0 12px;
+	border: none;
+	border-radius: var(--action-btn-radius);
+	font-size: 14px;
+	font-weight: 600;
+	color: #fff;
+	cursor: pointer;
+	box-shadow: 0 3px 6px rgba(0,0,0,0.06);
+	transition: transform 0.08s ease, opacity 0.12s ease;
+	white-space: nowrap;
 }
 
 /* ✅ View Button Color */
 .table-row .actions .view-btn {
-  background: #f0ad4e;
-  min-width: 84px;
-  padding: 0 10px;
-  color: #fff;
+	background: #f0ad4e;
+	min-width: 84px;
+	padding: 0 10px;
+	color: #fff;
 }
 
 .table-row .actions .approve-btn {
-  background: #4CAF50;
+	background: #4CAF50;
 }
+
 .table-row .actions .reject-btn {
-  background: #E53935;
+	background: #E53935;
 }
 
 .table-row .actions button:hover {
-  transform: translateY(-2px);
-  opacity: 0.95;
+	transform: translateY(-2px);
+	opacity: 0.95;
 }
 
 /* ---------- Responsive ---------- */
 @media (max-width: 1080px) {
-  .table-head,
+	.table-head,
   .table-body .table-row {
-    grid-template-columns:
-      0.8fr 1.6fr 2fr 1.3fr 1.3fr 1.1fr 1fr; /* ETA column removed */
-  }
+		grid-template-columns: 0.8fr 1.6fr 2fr 1.3fr 1.3fr 1.1fr 1fr;
+ /* ETA column removed */;
+	}
 }
 
 @media (max-width: 720px) {
-  .table-head {
-    display: none;
-  }
+	.table-head {
+		display: none;
+	}
 
-  .table-body {
-    overflow-y: auto;
-  }
+	.table-body {
+		overflow-y: auto;
+	}
 
-  .table-body .table-row {
-    display: block;
-    margin: 8px 0;
-    border-radius: 10px;
-    box-shadow: var(--shadow-subtle);
-    padding: 12px;
-  }
+	.table-body .table-row {
+		display: block;
+		margin: 8px 0;
+		border-radius: 10px;
+		box-shadow: var(--shadow-subtle);
+		padding: 12px;
+	}
 
-  .table-body .table-row > div {
-    display: flex;
-    justify-content: space-between;
-    padding: 4px 0;
-  }
+	.table-body .table-row > div {
+		display: flex;
+		justify-content: space-between;
+		padding: 4px 0;
+	}
 
-  .table-row .actions {
-    flex-direction: column;
-    gap: 8px;
-    align-items: stretch;
-    margin-top: 8px;
-  }
+	.table-row .actions {
+		flex-direction: column;
+		gap: 8px;
+		align-items: stretch;
+		margin-top: 8px;
+	}
 
-  .table-row .actions button {
-    width: 100%;
-  }
+	.table-row .actions button {
+		width: 100%;
+	}
 }
 
 /* ---------- Navigation ---------- */
 .nav-item {
-  display: flex;
-  align-items: center;
-  gap: 10px;
+	display: flex;
+	align-items: center;
+	gap: 10px;
 }
