@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>E-Barangay Dashboard - Documents</title>
   <link rel="stylesheet" href="dashboard.css" />
-  <link rel="stylesheet" href="crud.css" />
+  <link rel="stylesheet" href="crud_enlist.css" />
   <link rel="stylesheet" href="modal.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -74,30 +74,42 @@
     </main>
   </div>
 
-  <!-- ✅ Integrated Modal -->
-  <div class="modal-overlay" id="detailsModal">
-    <div class="modal-container" role="dialog" aria-modal="true" aria-labelledby="modal-title">
-      <header class="modal-container-header">
-        <h1 id="modal-title" class="modal-container-title">Request Details</h1>
-        <button class="icon-button modal-close" aria-label="Close">✖</button>
-      </header>
+<!-- ✅ Integrated Modal -->
+<div class="modal-overlay" id="detailsModal">
+  <div class="modal-container" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <header class="modal-container-header">
+      <h1 id="modal-title" class="modal-container-title">Request Details</h1>
+      <button class="icon-button modal-close" aria-label="Close">✖</button>
+    </header>
 
-      <section class="modal-container-body rtf" id="modal-message">
-        <p><strong>Name:</strong> <span id="modal-name"></span></p>
-        <p><strong>Civil Status:</strong> <span id="modal-type"></span></p>
-        <p><strong>Address:</strong> <span id="modal-address"></span></p>
-        <p><strong>Contact Number:</strong> <span id="modal-contact"></span></p>
-        <p><strong>Date Requested:</strong> <span id="modal-date"></span></p>
-        <p><strong>Purpose of Registration:</strong> <span id="modal-purpose"></span></p>
-      </section>
+    <section class="modal-container-body rtf" id="modal-message">
+      <p><strong>Name:</strong> <span id="modal-name"></span></p>
+      <p><strong>Civil Status:</strong> <span id="modal-type"></span></p>
+      <p><strong>Address:</strong> <span id="modal-address"></span></p>
+      <p><strong>Contact Number:</strong> <span id="modal-contact"></span></p>
+      <p><strong>Date Requested:</strong> <span id="modal-date"></span></p>
+      <p><strong>Purpose of Registration:</strong> <span id="modal-purpose"></span></p>
 
-      <footer class="modal-container-footer">
-        <button class="button is-approve" id="approve-btn">Approve</button>
-        <button class="button is-reject" id="reject-btn">Reject</button>
-        <button class="button is-ghost modal-close">Close</button>
-      </footer>
-    </div>
+      <!-- NEW ETA field (editable by admin) -->
+      <p style="margin-top:10px;">
+        <label for="modal-eta"><strong>ETA (estimated time):</strong></label><br />
+        <input id="modal-eta" type="text" placeholder="e.g. 3 days, 1 week, 2 business days"
+          style="width:100%;padding:8px;border:1px solid #ccc;border-radius:6px;" />
+      </p>
+    </section>
+
+    <footer class="modal-container-footer" style="display:flex;gap:8px;align-items:center;">
+      <button class="button is-approve" id="approve-btn">Approve</button>
+      <button class="button is-reject" id="reject-btn">Reject</button>
+
+      <!-- NEW Save ETA button -->
+      <button class="button is-primary" id="save-eta-btn">Save ETA</button>
+
+      <button class="button is-ghost modal-close">Close</button>
+    </footer>
   </div>
+</div>
+
 
 
   <script type="module" src="../firebase-config.js"></script>

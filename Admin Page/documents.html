@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>E-Barangay Dashboard - Documents</title>
   <link rel="stylesheet" href="dashboard.css" />
-  <link rel="stylesheet" href="crud.css" />
+  <link rel="stylesheet" href="crud_doc.css" />
   <link rel="stylesheet" href="modal.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -68,6 +68,7 @@
             <div>Status</div>
             <div>Actions</div>
           </div>
+
           <div class="table-body"></div>
         </div>
       </section>
@@ -86,16 +87,27 @@
         <p><strong>Type of Request:</strong> <span id="modal-type"></span></p>
         <p><strong>Date Requested:</strong> <span id="modal-date"></span></p>
         <p><strong>Address:</strong> <span id="modal-address"></span></p>
+
         <label><strong>Reason:</strong></label>
         <textarea id="modal-reason" readonly
           style="width:100%;height:80px;border:1px solid #ccc;border-radius:6px;padding:8px;"></textarea>
+
+        <!-- NEW ETA field (editable by admin) -->
+        <p style="margin-top:10px;">
+          <label for="modal-eta"><strong>ETA (estimated time):</strong></label><br />
+          <input id="modal-eta" type="text" placeholder="e.g. 3 days, 1 week, 2 business days"
+            style="width:100%;padding:8px;border:1px solid #ccc;border-radius:6px;" />
+        </p>
       </section>
-      <footer class="modal-container-footer">
+      <footer class="modal-container-footer" style="display:flex;gap:8px;align-items:center;">
         <button class="button is-approve" id="approve-btn">Approve</button>
         <button class="button is-reject" id="reject-btn">Reject</button>
+
+        <!-- NEW Save ETA button -->
+        <button class="button is-primary" id="save-eta-btn">Save ETA</button>
+
         <button class="button is-ghost modal-close">Close</button>
       </footer>
-
     </div>
   </div>
 

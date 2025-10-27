@@ -18,6 +18,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const logoutButton = document.querySelector('.logout-btn');
   const approveBtnModal = document.getElementById('approve-btn');
   const rejectBtnModal = document.getElementById('reject-btn');
+  const saveEtaBtn = document.getElementById('save-eta-btn');
+  const etaInput = document.getElementById('modal-eta');
   let adminId = null;
 
   if (!tableBody) console.warn('tableBody not found');
@@ -104,6 +106,9 @@ document.addEventListener('DOMContentLoaded', () => {
           date = '—';
         }
 
+        // show eta in its own column; use a friendly placeholder if not set
+        const etaDisplay = requestData.eta ? escapeHtml(String(requestData.eta)) : '—';
+
         row.innerHTML = `
           <div>${rowIndex}</div>
           <div>${escapeHtml(requestData.name || '—')}</div>
@@ -165,6 +170,25 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  // Update ETA field on a document
+  async function updateEta(docId, etaValue) {
+    try {
+      if (!docId) throw new Error('No document id provided to updateEta');
+      const requestDocRef = doc(db, 'REQUESTS', docId);
+      // store eta as string (you can change parsing/validation as needed)
+      await updateDoc(requestDocRef, {
+        eta: etaValue,
+        updatedBy: adminId,
+        updatedAt: serverTimestamp()
+      });
+      // refresh listing so table shows updated ETA immediately
+      await loadDocuments();
+    } catch (err) {
+      console.error('Failed to update ETA:', err);
+      alert('Failed to save ETA. Check console for details.');
+    }
+  }
+
   // simplified openModal: use the numericId passed in (rowIndex) and the passed requestData
   function openModal(firebaseDocId, numericId, requestData) {
     const idToShow = numericId ?? '—';
@@ -191,7 +215,12 @@ document.addEventListener('DOMContentLoaded', () => {
     if (addressEl) addressEl.innerText = data.address ?? '—';
     if (reasonEl) reasonEl.value = data.reason ?? '';
 
-    // store current firebase id for modal approve/reject
+    // populate eta input if present
+    if (etaInput) {
+      etaInput.value = data.eta ?? '';
+    }
+
+    // store current firebase id for modal approve/reject/save
     modal.dataset.currentDocId = firebaseDocId;
     openModalOverlay();
   }
@@ -248,6 +277,30 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   } else {
     console.warn('#reject-btn not found in DOM');
+  }
+
+  if (saveEtaBtn && etaInput) {
+    saveEtaBtn.addEventListener('click', async (e) => {
+      e.preventDefault();
+      const docId = modal.dataset.currentDocId;
+      if (!docId) {
+        console.error('No currentDocId found on modal.dataset');
+        alert('Unable to save ETA: no document selected.');
+        return;
+      }
+      saveEtaBtn.disabled = true;
+      try {
+        const etaVal = etaInput.value.trim();
+        // optional: validate eta formatting here (e.g., numbers or "3 days")
+        await updateEta(docId, etaVal);
+        // Update modal display so admin sees saved value
+        if (etaInput) etaInput.value = etaVal;
+      } finally {
+        saveEtaBtn.disabled = false;
+      }
+    });
+  } else {
+    console.warn('#save-eta-btn or #modal-eta not found in DOM');
   }
 
   console.debug('Documents page JS loaded. Modal element:', modal);
