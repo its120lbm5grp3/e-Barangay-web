@@ -1,10 +1,22 @@
 {
   "version": 2,
   "builds": [
-    { "src": "Log-Reg Page/**/*", "use": "@vercel/static" }
+    { "src": "Log-Reg Page/**/*", "use": "@vercel/static" },
+    { "src": "User Page/**/*", "use": "@vercel/static" },
+    { "src": "Admin Page/**/*", "use": "@vercel/static" }
   ],
   "routes": [
-    { "src": "/", "dest": "Log-Reg Page/login.html" },
+    { "src": "^/$", "dest": "Log-Reg Page/login.html" },
+    { "src": "^/login$", "dest": "Log-Reg Page/login.html" },
+    { "src": "^/register$", "dest": "Log-Reg Page/register.html" },
+
+    { "src": "^/user$", "dest": "User Page/index.html" },
+    { "src": "^/user/index$", "dest": "User Page/index.html" },
+    { "src": "^/user/(.*)$", "dest": "User Page/$1.html" },
+
+    { "src": "^/admin$", "dest": "Admin Page/dashboard.html" },
+    { "src": "^/admin/(.*)$", "dest": "Admin Page/$1.html" },
+
     { "src": "/(.*)", "dest": "Log-Reg Page/$1" }
   ]
 }
