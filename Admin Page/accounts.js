@@ -4,12 +4,18 @@ import { collection, getDocs, doc, setDoc, getDoc, updateDoc, serverTimestamp } 
 import { ref as rtdbRef, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
 document.addEventListener('DOMContentLoaded', () => {
-    const firstNameField = document.getElementById('firstName');
-    const lastNameField = document.getElementById('lastName');
-    const usernameField = document.getElementById('username');
-    const passwordField = document.getElementById('password');
-    const roleField = document.getElementById('role');
-    const createAccountButton = document.querySelector('.form-section button');
+    // Support both old IDs and the new acct-* IDs so it's backwards-compatible
+    const firstNameField = document.getElementById('acct-first') || document.getElementById('firstName');
+    const lastNameField  = document.getElementById('acct-last')  || document.getElementById('lastName');
+    const usernameField  = document.getElementById('acct-email') || document.getElementById('username');
+    const passwordField  = document.getElementById('acct-password') || document.getElementById('password');
+    const roleField      = document.getElementById('acct-role')   || document.getElementById('role');
+
+    // Prefer exact button id, fall back to other selectors if needed
+    const createAccountButton = document.getElementById('create-account-btn')
+                                || document.querySelector('.form-section button')
+                                || document.querySelector('.btn-create');
+
     const accountRows = document.getElementById('account-rows');
     const logoutButton = document.querySelector('.logout-btn');
 
@@ -45,7 +51,7 @@ document.addEventListener('DOMContentLoaded', () => {
     async function loadAccounts() {
         presenceListeners.forEach(unsubscribe => unsubscribe());
         presenceListeners = [];
-        accountRows.innerHTML = ''; 
+        if (accountRows) accountRows.innerHTML = ''; 
 
         const usersSnapshot = await getDocs(collection(db, 'users'));
         let id = 1;
@@ -115,11 +121,17 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     async function createAccount() {
+        // Ensure fields exist
+        if (!usernameField || !passwordField || !firstNameField || !lastNameField || !roleField) {
+            alert('Create account fields not found on the page. Check HTML IDs.');
+            return;
+        }
+
         const email = usernameField.value.trim();
         const password = passwordField.value.trim();
         const firstName = firstNameField.value.trim();
         const lastName = lastNameField.value.trim();
-        const role = roleField.value;
+        const role = roleField.value || 'user';
 
         if (!email || !password || !firstName || !lastName) {
             alert('Please fill out all fields.');
@@ -130,8 +142,10 @@ document.addEventListener('DOMContentLoaded', () => {
             const userCredential = await createUserWithEmailAndPassword(auth, email, password);
             const newUser = userCredential.user;
 
+            // send verification email
             await sendEmailVerification(newUser);
 
+            // save user doc
             await setDoc(doc(db, 'users', newUser.uid), {
                 firstName: firstName,
                 lastName: lastName,
@@ -145,14 +159,18 @@ document.addEventListener('DOMContentLoaded', () => {
             });
             
             alert("Account created successfully. A verification email has been sent.");
-            loadAccounts(); 
+            await loadAccounts(); 
+
+            // reset fields
             firstNameField.value = '';
             lastNameField.value = '';
             usernameField.value = '';
             passwordField.value = '';
+            if (roleField.tagName === 'SELECT') roleField.selectedIndex = 0;
+
         } catch (error) {
             console.error("Error creating new account:", error);
-            alert("Could not create account: " + error.message);
+            alert("Could not create account: " + (error && error.message ? error.message : error));
         }
     }
 
@@ -203,5 +221,13 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    createAccountButton.addEventListener('click', createAccount);
+    // Only attach listener if a button was found
+    if (createAccountButton) {
+        createAccountButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            createAccount();
+        });
+    } else {
+        console.warn('Create account button not found - expected #create-account-btn or .btn-create.');
+    }
 });

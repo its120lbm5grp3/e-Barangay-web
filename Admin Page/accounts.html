@@ -1,191 +1,175 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>E-Barangay Dashboard - Accounts</title>
-    <link rel="stylesheet" href="dashboard.css" />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Montserrat:wght@700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" />
-    <style>
-      :root {
-        --yellow-bg: #FFD633;
-        --muted: #555;
-        --card-bg: #fff;
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>E-Barangay Dashboard - Accounts</title>
+
+  <!-- keep same styles as other pages for consistent UI -->
+  <link rel="stylesheet" href="dashboard.css" />
+  <link rel="stylesheet" href="crud.css" />
+  <link rel="stylesheet" href="modal.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Montserrat:wght@700;800&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    crossorigin="anonymous" />
+  <style>
+    /* small local tweaks so Accounts follows the same visual spacing as Documents page */
+    .form-inline {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
+    }
+
+    .form-inline input,
+    .form-inline select {
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid rgba(0, 0, 0, 0.08);
+      background: #fff;
+    }
+
+    .btn-create {
+      background: var(--yellow, #FFD336);
+      border: none;
+      padding: 10px 14px;
+      border-radius: 10px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    /* keep accounts table consistent with other pages' table grid */
+    .doc-table .table-head,
+    .doc-table .table-row {
+      display: grid;
+      grid-template-columns: 0.6fr 1.6fr 1.8fr 1fr 1fr 0.9fr 0.6fr 1fr;
+      gap: 12px;
+      padding: 12px;
+      align-items: center;
+    }
+
+    @media(max-width:920px) {
+
+      .doc-table .table-head,
+      .doc-table .table-row {
+        grid-template-columns: 1fr 1.6fr 1fr;
       }
 
-      .main-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 20px;
+      .doc-table .table-head> :nth-child(n+4),
+      .doc-table .table-row> :nth-child(n+4) {
+        display: none;
       }
-      .title {
-        font-size: 24px;
-        font-weight: 700;
-      }
+    }
+  </style>
+</head>
 
-      .form-section {
-        background: var(--card-bg);
-        padding: 20px;
-        border-radius: 10px;
-        box-shadow: 0 1px 4px rgba(0,0,0,0.06);
-        margin-bottom: 20px;
-      }
-      .form-section h2 {
-        font-size: 18px;
-        margin-bottom: 12px;
-      }
-      .form-group {
-        display: flex;
-        gap: 10px;
-        margin-bottom: 10px;
-        flex-wrap: wrap;
-      }
-      .form-group input,
-      .form-group select {
-        padding: 8px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        flex: 1;
-        min-width: 150px;
-      }
-      .form-section button {
-        background: #4CAF50;
-        color: white;
-        border: none;
-        padding: 8px 16px;
-        border-radius: 5px;
-        cursor: pointer;
-      }
-
-      .table-section h2 {
-        font-size: 18px;
-        margin-bottom: 12px;
-      }
-      .account-table {
-        background: var(--card-bg);
-        border-radius: 10px;
-        box-shadow: 0 1px 4px rgba(0,0,0,0.06);
-        overflow: hidden;
-      }
-      .table-head, .table-row {
-        display: grid;
-        grid-template-columns: 0.5fr 1.5fr 1.5fr 1fr 1fr 1fr 1fr 1.5fr;
-        gap: 12px;
-        padding: 12px;
-        align-items: center;
-      }
-      .table-head {
-        background: #FFDF6C;
-        font-weight: 600;
-      }
-      .table-row {
-        border-top: 1px solid rgba(0,0,0,0.05);
-      }
-      .actions-btn {
-        background: #E53935;
-        color: white;
-        border: none;
-        padding: 6px 10px;
-        border-radius: 6px;
-        cursor: pointer;
-      }
-
-      .nav-item.active {
-        background-color: var(--yellow-bg);
-        color: #000;
-        font-weight: 700;
-      }
-
-      .status-active {
-        color: #4CAF50;
-        font-weight: 600;
-      }
-      .status-inactive {
-        color: #E53935;
-        font-weight: 600;
-      }
-
-    </style>
-  </head>
-  <body>
-    <div class="dashboard-root">
-      <aside class="sidebar">
-        <div class="sidebar-inner">
-          <img class="logo" src="../User Page/assets/barangay-logo.png" alt="Barangay logo"/>
-          <nav class="nav" aria-label="Main navigation">
-            <a href="dashboard.html" class="nav-item">
-              <i class="fa-solid fa-chart-simple"></i>
-              <span>Dashboard</span>
-            </a>
-            <a href="documents.html" class="nav-item">
-              <i class="fa-solid fa-file-lines"></i>
-              <span>Documents</span>
-            </a>
-            <a href="enlistments.html" class="nav-item">
-              <i class="fa-solid fa-clipboard-check"></i>
-              <span>Enlistment</span>
-            </a>
-            <a href="accounts.html" class="nav-item active" aria-current="page">
-              <i class="fa-solid fa-user"></i>
-              <span>Accounts</span>
-            </a>
-          </nav>
-        </div>
-        <div class="logout">
-          <a href="..\log-reg\login.html" class="nav-item logout-btn">
-            <i class="fa-solid fa-right-from-bracket"></i>
-            <span>Logout</span>
+<body>
+  <div class="dashboard-root">
+    <aside class="sidebar">
+      <div class="sidebar-inner">
+        <img class="logo" src="../User Page/assets/barangay-logo.png" alt="Barangay logo" />
+        <nav class="nav" aria-label="Main navigation">
+          <a href="dashboard.html" class="nav-item">
+            <i class="fa-solid fa-chart-simple"></i>
+            <span>Dashboard</span>
           </a>
+          <a href="documents.html" class="nav-item">
+            <i class="fa-solid fa-file-lines"></i>
+            <span>Documents</span>
+          </a>
+          <a href="enlistments.html" class="nav-item">
+            <i class="fa-solid fa-clipboard-check"></i>
+            <span>Enlistment</span>
+          </a>
+          <a href="accounts.html" class="nav-item" aria-current="page">
+            <i class="fa-solid fa-user"></i>
+            <span>Accounts</span>
+          </a>
+        </nav>
+      </div>
+
+      <div class="logout">
+        <a href="..\log-reg\login.html" class="nav-item logout-btn">
+          <i class="fa-solid fa-right-from-bracket"></i>
+          <span>Logout</span>
+        </a>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="main-header">
+        <h1 class="title">Manage Accounts</h1>
+        <div class="search-bar">
+          <i class="fa-solid fa-search"></i>
+          <input type="text" placeholder="Search">
         </div>
-      </aside>
+      </header>
 
-      <main class="main">
-        <header class="main-header">
-          <h1 class="title">Manage Accounts</h1>
-        </header>
+      <!-- Updated Create Account Form -->
+      <section class="doc-section" style="margin-bottom:18px;">
+        <div class="form-inline"> <input id="acct-first" type="text" placeholder="First name" /> <input id="acct-last"
+            type="text" placeholder="Last name" /> <input id="acct-email" type="email" placeholder="Email" /> <input
+            id="acct-password" type="password" placeholder="Password" /> <select id="acct-role">
+            <option value="user">User</option>
+            <option value="admin">Admin</option>
+          </select> <button id="create-account-btn" class="btn btn-primary btn-create"><i class="fa-solid fa-plus"></i>
+            Create</button> </div>
+      </section>
 
-        <!-- Account Creation Form -->
-        <section class="form-section">
-          <h2>Create New Account</h2>
-          <div class="form-group">
-            <input type="text" id="firstName" placeholder="First Name">
-            <input type="text" id="lastName" placeholder="Last Name">
-            <input type="text" id="username" placeholder="Email">
-            <input type="password" id="password" placeholder="Password">
-            <select id="role">
-              <option value="user">User</option>
-              <option value="admin">Admin</option>
-            </select>
+      <section class="doc-section">
+        <div class="doc-table">
+          <div class="table-head">
+            <div>ID No.</div>
+            <div>Name</div>
+            <div>Email</div>
+            <div>Date Created</div>
+            <div>Role</div>
+            <div>Status</div>
+            <div>Online</div>
+            <div>Actions</div>
           </div>
-          <button><i class="fa-solid fa-plus"></i> Create Account</button>
-        </section>
 
-        <!-- Accounts Table -->
-        <section class="table-section">
-          <h2>Accounts List</h2>
-          <div class="account-table">
-            <div class="table-head">
-              <div>ID</div>
-              <div>Name</div>
-              <div>Email</div>
-              <div>Date Created</div>
-              <div>Role</div>
-              <div>Status</div>
-              <div>Online</div>
-              <div>Actions</div>
-            </div>
-            <div id="account-rows"></div>
-          </div>
-        </section>
-      </main>
+          <!-- same selector used by documents/enlistments JS -->
+          <div class="table-body" id="account-rows"></div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Modal (same structure as Documents modal for consistency) -->
+  <div class="modal-overlay" id="modal">
+    <div class="modal-container" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      <header class="modal-container-header">
+        <h1 id="modal-title" class="modal-container-title">Account Details</h1>
+        <button class="icon-button modal-close" aria-label="Close">✖</button>
+      </header>
+
+      <section class="modal-container-body rtf" id="modal-message">
+        <p><strong>Name:</strong> <span id="modal-name"></span></p>
+        <p><strong>Email:</strong> <span id="modal-email"></span></p>
+        <p><strong>Role:</strong> <span id="modal-role"></span></p>
+        <p><strong>Status:</strong> <span id="modal-status"></span></p>
+        <label><strong>Notes:</strong></label>
+        <textarea id="modal-notes" readonly
+          style="width:100%;height:80px;border:1px solid #ccc;border-radius:6px;padding:8px;"></textarea>
+      </section>
+
+      <footer class="modal-container-footer">
+        <button class="button is-ghost modal-close">Close</button>
+      </footer>
     </div>
+  </div>
 
-    <script type="module" src="../firebase-config.js"></script>
-    <script type="module" src="accounts.js"></script>
-    <script type="module" src="../presence.js"></script>
-  </body>
+  <!-- keep the same script imports used across your admin pages -->
+  <script type="module" src="../firebase-config.js"></script>
+  <script type="module" src="accounts.js"></script>
+  <script type="module" src="../presence.js"></script>
+</body>
+
 </html>
